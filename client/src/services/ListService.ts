@@ -1,14 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IList } from '../models/IList';
 
-export const listApi = createApi({
+ export const listApi = createApi({
     reducerPath: 'listApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
     tagTypes: ['List'],
     endpoints: (build) => ({
         fetchLists: build.query<IList[], void>({
         query: () => ({
-            url: '/list'
+            url: '/list',
         }),
         providesTags: result => ['List']
         }),
@@ -40,3 +40,7 @@ export const listApi = createApi({
 
     })
 });
+
+
+
+export const { useFetchListsQuery, usePostListMutation, useUpdateListMutation, useDeleteListMutation } = listApi;

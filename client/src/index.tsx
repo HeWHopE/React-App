@@ -1,26 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-
-import App from './App';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import App from './App';
 import { setupStore } from './store/store';
 
 const store = setupStore();
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
+// Include Font Awesome Kit script
+const script = document.createElement('script');
+script.src = 'https://kit.fontawesome.com/41f14c9e5f.js';
+script.crossOrigin = 'anonymous';
+document.head.appendChild(script);
 
-  <Provider store={store}>
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-

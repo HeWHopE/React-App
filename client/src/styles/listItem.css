@@ -1,0 +1,76 @@
+.list-item {
+    position: relative; /* Set position to relative */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+    text-align: left;
+    border-top: #ccc solid 1px;
+    border-bottom: #ccc solid 1px;
+    padding: 10px;
+  }
+  
+  .list-item-dots {
+    cursor: pointer; /* Add cursor pointer for interaction */
+  }
+  
+  .popup {
+    position: absolute;
+    left: calc(50% - 70px); 
+    top: 30px; 
+    width: 140px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 100; /* Set a high z-index value to ensure the popup appears above other elements */
+  }
+  
+  .list-item:hover .popup {
+    display: block; /* Display the popup when hovering over the list item */
+  }
+  
+  .popup > div {
+    margin-bottom: 5px; /* Add margin between popup items */
+  }
+  
+  .popup > div:last-child {
+    margin-bottom: 0; /* Remove margin for the last item */
+  }
+  
+
+.Edit, .Add-new-card, .Delete {
+    display: flex; /* Use flexbox to align icon and text */
+    align-items: center; /* Align items vertically */
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+.Delete {
+    color: red; /* Change text color for delete button */
+   
+}
+
+.Add-new-card {
+    padding-top: 10px;
+    padding-bottom: 10px; /* Change text color for add new card button */
+}
+
+
+.Edit > svg, .Add-new-card > svg, .Delete > svg {
+    margin-right: 5px; /* Add space between icon and text */
+}
+
+.dot-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px; /* Adjust the margin as needed */
+  }
+  
+  .dot-circle-text {
+    font-size: 12px; /* Adjust the font size as needed */
+  }

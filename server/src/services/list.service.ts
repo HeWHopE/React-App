@@ -9,7 +9,7 @@ export class ListService {
 
   async getAllTaskLists() {
     try {
-      console.log();
+
 
       const taskLists = await this.entityManager.query(
         'SELECT * FROM task_lists ORDER BY id;',

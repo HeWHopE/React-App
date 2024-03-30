@@ -1,0 +1,108 @@
+.task-item {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack child elements vertically */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .task-header {
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .task-name {
+    font-weight: bold;
+  }
+
+  .task-details {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; /* Stack child elements vertically */
+    margin-top: 10px;
+    flex-shrink: 0; /* Prevent container from shrinking */
+    max-width: 200px;
+  }
+
+  .task-description {
+    color: #9399AC;
+    margin-left: 0;
+    text-align: left    ;
+    word-wrap: break-word; 
+
+  }
+  
+  
+  
+  .task-due-date {
+    display: flex; /* Use flexbox layout */
+    align-items: center; /* Vertically center the content */
+    margin-top: 5px; /* Adjust margin as needed */
+    color: #6f7791;
+  }
+  
+  .due-date-icon {
+    margin-right: 5px; /* Adjust margin between icon and text */
+    color:black;
+  }
+
+  .task-priority {
+    padding-top: 10px;
+    display: flex; /* Use flexbox layout for better alignment */
+    align-items: center; /* Vertically center the dot and priority text */
+  }
+  
+  .priority-badge {
+    display: flex; /* Use flexbox layout to wrap dot and text */
+    align-items: center; /* Vertically center the dot and text */
+    background-color:#F3F4F6; /* Background color of the oval */
+    border-radius: 20px; /* Adjust border radius to create an oval */
+    padding: 3px 8px; /* Add padding around dot and text */
+  }
+  
+  .dot {
+    width: 6px; /* Size of the dot */
+    height: 6px;
+    border-radius: 50%; /* Make the dot circular */
+    background-color: #818BB1; /* Color of the dot */
+    margin-right: 5px; /* Spacing between the dot and priority text */
+    flex-shrink: 0; /* Prevent the dot from shrinking */
+    
+  }
+  
+  .priority-text {
+    font-size: 0.8em; /* Adjust the font size to make the priority text smaller */
+    color: #9399AC
+  }
+
+
+  .task-item {
+    position: relative; /* Make the container position relative */
+  }
+  
+  .popup {
+    position: absolute; /* Make the popup position absolute */
+    right: 0; /* Position the popup on the right side of the task */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    z-index: 998; /* Ensure the popup appears above other content */
+
+  }
+  
+  /* Additional styling for the popup items */
+  .popup > div {
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+  
+  .popup > div:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .task-buttons:hover {
+    cursor: pointer; /* Change cursor to pointer when hovering over the dots */
+}

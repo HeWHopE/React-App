@@ -1,8 +1,8 @@
-export interface IList {
+export interface ITask {
     id?: string;
     name: string;
     description: string;
-    dueDate: Date;
+    due_date: string;
     priority: string;
-    column_name: string;
+    list_name?: string;
 }

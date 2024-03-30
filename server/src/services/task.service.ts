@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { Task } from '../entities/task.entity'; // Import the Task entity
 import { ActivityLogService } from './activity-log.service'; 
 import { ActivityLog } from '../entities/activity-log.entity';
+import { CreateTaskDto } from 'src/dtos/taskDto.dto';
+import { validate } from 'class-validator';
 @Injectable()
 export class TaskService {
     constructor(
@@ -19,36 +21,43 @@ export class TaskService {
     return task;
   }
 
-  async createTask(task: Task, listId: number): Promise<Task> {
-    const { name, description, dueDate, priority } = task; 
+  async createTask(createTaskDto: CreateTaskDto, listId: number): Promise<Task> {
+    const { name, description, due_date, priority } = createTaskDto;
+    
+    // Validate the createTaskDto
+    const errors = await validate(createTaskDto);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed');
+    }
 
+    // Retrieve the list name based on the listId
     const listQueryResult = await this.entityManager.query(
       'SELECT name FROM task_lists WHERE id = $1',
       [listId]
-  );
-  
-
-  const list_name = listQueryResult[0].name;
-
-       const [newTask] = await this.entityManager.query(
-        'INSERT INTO tasks (name, description, due_date, priority, list_id, list_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [name, description, dueDate, priority, listId, list_name]
+    );
+    const list_name = listQueryResult[0].name;
+    
+    // Insert the new task into the database
+    const [newTask] = await this.entityManager.query(
+      'INSERT INTO tasks (name, description, due_date, priority, list_id, list_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [name, description, due_date, priority, listId, list_name]
     );
 
+    // Log the activity
     const activityLog = new ActivityLog();
     activityLog.actionType = 'create';
     activityLog.actionDescription = `You added ${newTask.name} to the ${newTask.column_name}`;
     activityLog.timestamp = new Date();
+    await this.activityLogService.logActivity(activityLog);
 
     return newTask;
+}
 
-  }
 
 
     async updateTask(id: number, listId: number, updatedTask: Task): Promise<Task | undefined> {
+      console.log('updatedTask', updatedTask);
     const existingTask = await this.getTask(id, listId);
-
-
 
     if (!existingTask || existingTask === updatedTask) {
         return;
@@ -63,20 +72,20 @@ export class TaskService {
             await this.activityLogService.logActivity(activityLog);
         }
     };
-
+    
     await Promise.all([
         
         logActivityIfChanged('description', updatedTask.description, `You updated the description of ${existingTask.name}`),
-        logActivityIfChanged('dueDate', updatedTask.dueDate, `You updated the due date of ${existingTask.name}`),
+        logActivityIfChanged('due_date', updatedTask.due_date, `You updated the due date of ${existingTask.name}`),
         logActivityIfChanged('priority', updatedTask.priority, `You changed the priority ${existingTask.name} from ${existingTask.priority} to ${updatedTask.priority}`),
         logActivityIfChanged('listName', updatedTask.list_name, `You moved ${existingTask.name} from ${existingTask.list_name} to ${updatedTask.list_name}`),
         logActivityIfChanged('name', updatedTask.name, `You renamed ${existingTask.name} to ${updatedTask.name}`),
     ]); 
 
-    const { name, description, dueDate, priority, list_name } = updatedTask;
+    const { name, description, due_date, priority, list_name } = updatedTask;
     const [updatedTaskRecord] = await this.entityManager.query(
-        'UPDATE tasks SET name = $1, description = $2, due_date = $3, priority = $4, column_name = $5 WHERE id = $6 AND list_id = $7 RETURNING *',
-        [name, description, dueDate, priority, list_name, id, listId]
+        'UPDATE tasks SET name = $1, description = $2, due_date = $3, priority = $4, list_name = $5 WHERE id = $6 AND list_id = $7 RETURNING *',
+        [name, description, due_date, priority, list_name, id, listId]
     );
 
     return updatedTaskRecord;

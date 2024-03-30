@@ -21,7 +21,6 @@ export class ListController {
     return this.listService.deleteTaskList(id);
   }
 
-
 @Put('list/:id')
   async updateTaskList(@Param('id') id: number, @Body() list: List) {
     return this.listService.updateTaskList(id, list);

@@ -1,40 +1,50 @@
-import React from 'react';
-import { listApi } from '../services/ListService';
+import { BsArrowClockwise } from "react-icons/bs";
+import { BsPlus } from "react-icons/bs";
+import CircleItem from './CircleItem';
+import MyButtons from './MyButtons';
+import { taskApi } from '../services/TaskService';
+import { ITask } from '../models/ITask';
 import ListItem from './ListItem';
 import { IList } from '../models/IList';
+import TaskItem from './taskItem';
+import TaskList from './taskList'; 
+
+import{useFetchListsQuery, useDeleteListMutation, useUpdateListMutation} from '../services/ListService';
 
 const ListContainer = () => {
-    const { data: lists, error, isLoading } = listApi.useFetchListsQuery();
-    const [createList] = listApi.usePostListMutation();
-
-    const [deleteList, {}]  = listApi.useDeleteListMutation();
-    const [updateList, {}] = listApi.useUpdateListMutation ();
-
-
-    const handleCreate = async () => {
-        const name = prompt('Enter list name');
-        if (name !== null) {
-            await createList({ name });
-        }
-    };
+    const { data: lists, error: listError, isLoading: listIsLoading } = useFetchListsQuery();
+    const [deleteList, {}] = useDeleteListMutation();
+    const [updateList, {}] = useUpdateListMutation();
 
     const handleRemove = (list: IList) => {
-        deleteList(list); // Pass the ID of the list to delete
+        deleteList(list); 
     };
     
     const handleUpdate = (list: IList) => {
-        updateList(list); // Pass the ID of the list to update
+        updateList(list); 
     };
-    
 
+    if (listIsLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (listError) {
+        return <div>Error</div>;
+    }
 
     return (
         <div>
-            <button onClick={handleCreate}>Create List</button>
-            {isLoading && <div>Loading...</div>}
-            {error && <div>Error</div>}
-            {lists &&  lists.map((list: IList) =>          
-                <ListItem remove ={handleRemove} update={handleUpdate} key={list.id} list={list} />)}
+            <div className="vertical-container">
+                    <div className="list-container" style={{ display: 'flex', flexDirection: 'row' }}>
+                        {lists && lists.map((list) => (
+                            <div key={list.id} style={{ margin: '20px' }}>
+                                <ListItem remove={handleRemove} update={handleUpdate} list={list} />
+                                <CircleItem listId={Number(list.id)} />
+                                <TaskList listId={Number(list.id)} />
+                            </div>
+                        ))}
+                    </div>
+            </div>
         </div>
     );
 };

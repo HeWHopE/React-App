@@ -66,12 +66,7 @@ export class TaskService {
      
     const existingTask = await this.getTask(id, listId);
 
-      console.log(typeof existingTask.list_name, 'existingTask.list_name');
-      console.log(typeof updatedTask.list_name, 'updatedTask.list_name');
-
-      console.log('existingTask', existingTask);
-      console.log('updatedTask', updatedTask);
-      
+  
     if (!existingTask || existingTask === updatedTask) {
         return;
     }
@@ -85,7 +80,7 @@ export class TaskService {
   const updatedDueDate = updatedTaskOnlyDate[0][0].due_date;
 
   if (existingDueDate.getTime() === updatedDueDate.getTime()) {
-    console.log('Date not changed here');
+    
   } else {
     const activityLog = new ActivityLog();
     activityLog.actionType = 'update';

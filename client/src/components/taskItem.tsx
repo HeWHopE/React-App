@@ -6,14 +6,18 @@ import { BiCalendarCheck } from "react-icons/bi";
 import { FiEdit } from "react-icons/fi";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import TaskModal from './taskModal';
+import { IList } from '../models/IList';
+import { useFetchListsQuery } from '../services/ListService';
 
 interface TaskItemProps {
   task: ITask;
   remove: (task: ITask) => void;
   update: (task: ITask) => void;
+  move: (listId: number, taskId: number, newTaskId: number) => void;
+
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move}) => {
   const [showPopup, setShowPopup] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskName, setTaskName] = useState(task.name);
@@ -21,6 +25,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update }) => {
   const [taskDueDate, setTaskDueDate] = useState(task.due_date);
   const [taskPriority, setTaskPriority] = useState(task.priority);
   const [error, setError] = useState('');
+
+  const { data: lists, error: listError, isLoading: listIsLoading } = useFetchListsQuery();
+
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -38,6 +45,23 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update }) => {
   const handleEditClick = () => {
     setIsModalOpen(true);
   };
+  
+  const handleSelectClick = (event: React.MouseEvent<HTMLSelectElement, MouseEvent>) => {
+    event.stopPropagation(); // Prevent propagation to parent elements
+  };
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newListId = event.target.value; // Get the selected list's ID
+    console.log(newListId, 'newListId')
+
+    console.log(task, 'task')
+
+    console.log(task.list_id, 'task.list_Id')
+    console.log(task.id, 'task.id')
+
+
+    move(Number(task.list_id), Number(task.id), Number(newListId)); // Save the updated task
+  };
 
   const handleUpdate = () => {
     if (!taskName || !taskDescription || !taskDueDate || !taskPriority) {
@@ -45,6 +69,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update }) => {
       return;
     }
 
+  
+     
     
     if(taskName.length > 20) {
       setError('Task name must be less than 20 characters.');
@@ -86,6 +112,17 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update }) => {
             <span className="dot"></span>
             <span className="priority-text">{task.priority}</span>
           </span>
+        </div>
+        <div>
+        <select value={task.list_id} onChange={handleSelectChange} onClick={handleSelectClick}>
+  <option value="1" >Select a list</option>
+  {lists && lists
+    .filter((list: IList) => list.id !== task.list_id) // Exclude the task's own list
+    .map((list: IList) => (
+      <option key={list.id} value={list.id}>{list.name}  {list.id}</option>
+    ))}
+</select>
+
         </div>
       </div>
       {showPopup && (

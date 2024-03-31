@@ -36,13 +36,14 @@ const ListContainer = () => {
         <div>
             <div className="vertical-container">
                     <div className="list-container" style={{ display: 'flex', flexDirection: 'row' }}>
-                        {lists && lists.map((list) => (
-                            <div key={list.id} style={{ margin: '20px' }}>
-                                <ListItem remove={handleRemove} update={handleUpdate} list={list} />
-                                <CircleItem listId={Number(list.id)} />
-                                <TaskList listId={Number(list.id)} />
-                            </div>
-                        ))}
+                    {lists && lists.map((list: IList) => (
+    <div key={list.id} style={{ margin: '20px' }}>
+        <ListItem remove={handleRemove} update={handleUpdate} list={list} />
+        <CircleItem listId={Number(list.id)} />
+        <TaskList listId={Number(list.id)}/>
+    </div>
+))}
+
                     </div>
             </div>
         </div>

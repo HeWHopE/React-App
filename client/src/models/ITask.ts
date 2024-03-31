@@ -5,4 +5,5 @@ export interface ITask {
     due_date: string;
     priority: string;
     list_name?: string;
+    list_id?: string;
 }

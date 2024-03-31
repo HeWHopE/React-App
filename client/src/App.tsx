@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import './styles/App.css';
-import { useSelector } from 'react-redux';
-import { useAppSelector } from './hooks/useAppDispatch';
-import { userSlice } from './store/reducers/UserSlice';
-import { useAppDispatch } from './hooks/useAppDispatch';
-import { fetchLists } from './store/reducers/ActionCreator';
-import HistoryButton from './components/historyButton';
-import ListContainer from './components/listContainer';
-import CreateListButton from './components/createListButton';
-import HistoryModal from './components/historyModal';
-import { useFetchActivityQuery } from './services/ActivityService';
+import React, { useEffect, useState } from 'react'
+import './styles/App.css'
+import { useSelector } from 'react-redux'
+import { useAppSelector } from './hooks/useAppDispatch'
+import { userSlice } from './store/reducers/UserSlice'
+import { useAppDispatch } from './hooks/useAppDispatch'
+import { fetchLists } from './store/reducers/ActionCreator'
+import HistoryButton from './components/historyButton'
+import ListContainer from './components/listContainer'
+import CreateListButton from './components/createListButton'
+import HistoryModal from './components/historyModal'
+import { useFetchActivityQuery } from './services/ActivityService'
 
 function App() {
-  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
-  const { data: activities, refetch } = useFetchActivityQuery();
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
+  const { data: activities, refetch } = useFetchActivityQuery()
 
   const handleRefresh = () => {
-    refetch();
-      }
+    refetch()
+  }
 
   const handleOpenHistoryModal = () => {
-    setIsHistoryModalOpen(true);
-  };
+    setIsHistoryModalOpen(true)
+  }
 
   const handleCloseHistoryModal = () => {
-    setIsHistoryModalOpen(false);
-  };
+    setIsHistoryModalOpen(false)
+  }
 
   return (
     <div className="App">
@@ -34,15 +34,26 @@ function App() {
           <div className="navbar-title">My Task Board</div>
           <div className="navbar-buttons">
             <CreateListButton />
-            <HistoryButton onClick={() => { handleOpenHistoryModal(); handleRefresh(); }} />
+            <HistoryButton
+              onClick={() => {
+                handleOpenHistoryModal()
+                handleRefresh()
+              }}
+            />
           </div>
         </div>
       </nav>
-      <HistoryModal isOpen={isHistoryModalOpen} onClose={handleCloseHistoryModal} activities={activities}/>
-      {isHistoryModalOpen && <div className="overlay" onClick={handleCloseHistoryModal}></div>}
+      <HistoryModal
+        isOpen={isHistoryModalOpen}
+        onClose={handleCloseHistoryModal}
+        activities={activities}
+      />
+      {isHistoryModalOpen && (
+        <div className="overlay" onClick={handleCloseHistoryModal}></div>
+      )}
       <ListContainer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

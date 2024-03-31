@@ -1,17 +1,13 @@
-
-
 .history-button {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    border: 2px solid #EBEFF5;
-
-   
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid #ebeff5;
 }

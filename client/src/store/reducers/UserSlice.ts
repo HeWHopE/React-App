@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchLists } from './ActionCreator';
-import { IList } from '../../models/IList';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchLists } from './ActionCreator'
+import { IList } from '../../models/IList'
 
 interface ListState {
-  lists: IList[];
-  isLoading: boolean;
-  error: string;
+  lists: IList[]
+  isLoading: boolean
+  error: string
 }
 
 const initialState: ListState = {
@@ -20,19 +20,22 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchLists.fulfilled, (state, action: PayloadAction<IList[]>) => {
-        state.isLoading = false;
-        state.error = '';
-        state.lists = action.payload;
-      })
+      .addCase(
+        fetchLists.fulfilled,
+        (state, action: PayloadAction<IList[]>) => {
+          state.isLoading = false
+          state.error = ''
+          state.lists = action.payload
+        },
+      )
       .addCase(fetchLists.pending, (state) => {
-        state.isLoading = true;
+        state.isLoading = true
       })
       .addCase(fetchLists.rejected, (state) => {
-        state.isLoading = false;
-        state.error = 'Error fetching users';
-      });
+        state.isLoading = false
+        state.error = 'Error fetching users'
+      })
   },
-});
+})
 
-export default userSlice.reducer;
+export default userSlice.reducer

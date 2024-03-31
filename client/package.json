@@ -51,6 +51,13 @@
   },
   "devDependencies": {
     "@types/react-dom": "^18.2.23",
-    "@types/react-modal": "^3.16.3"
+    "@types/react-modal": "^3.16.3",
+    "prettier": "^3.2.5"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "useTabs": false
   }
 }

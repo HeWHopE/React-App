@@ -1,7 +1,4 @@
-
-
 .list-container,
 .task-container {
-    margin-bottom: 20px; /* Add some margin between the lists and tasks */
-    
+  margin-bottom: 20px; /* Add some margin between the lists and tasks */
 }

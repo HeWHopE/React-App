@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 400px; 
+  width: 400px;
   height: 100%;
   background-color: #fff;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
@@ -18,9 +18,8 @@
 .history-modal-content {
   padding: 20px;
 
-    max-height: calc(100% - 60px); /* Adjust as needed */
-    overflow-y: auto;
-  
+  max-height: calc(100% - 60px); /* Adjust as needed */
+  overflow-y: auto;
 }
 
 /* Navbar styles */
@@ -46,7 +45,6 @@
   color: #e1e6eb;
 }
 
-
 .history-item-list {
   margin-left: 20px;
   padding: 0;
@@ -63,7 +61,6 @@
 }
 
 .history-item-list li div:first-child {
-  
   font-weight: bold;
 }
 

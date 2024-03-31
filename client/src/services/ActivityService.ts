@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ActivityLog } from '../models/IActivity';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { ActivityLog } from '../models/IActivity'
 
 export const activityApi = createApi({
   reducerPath: 'activityApi',
@@ -10,9 +10,9 @@ export const activityApi = createApi({
       query: () => ({
         url: '/activity',
       }),
-      providesTags: result => ['activity']
+      providesTags: (result) => ['activity'],
     }),
-  })
-});
+  }),
+})
 
-export const { useFetchActivityQuery } = activityApi;
+export const { useFetchActivityQuery } = activityApi

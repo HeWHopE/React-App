@@ -1,66 +1,66 @@
-import React from 'react';
-import { taskApi } from '../services/TaskService';
-import TaskItem from './taskItem';
-import { ITask } from '../models/ITask';
-import { IList } from '../models/IList';
-import { useMoveTaskMutation } from '../services/TaskService';
+import React from 'react'
+import { taskApi } from '../services/TaskService'
+import TaskItem from './taskItem'
+import { ITask } from '../models/ITask'
+import { IList } from '../models/IList'
+import { useMoveTaskMutation } from '../services/TaskService'
 
 interface TaskListProps {
-    listId?: number; 
-  
+  listId?: number
 }
 
-const TaskList: React.FC<TaskListProps> = ({ listId}) => {
+const TaskList: React.FC<TaskListProps> = ({ listId }) => {
+  const [moveTask] = useMoveTaskMutation()
 
-    const [moveTask] = useMoveTaskMutation();
-   
-    if (listId === undefined) {
-        return <div>List ID not provided</div>;
-    }
+  if (listId === undefined) {
+    return <div>List ID not provided</div>
+  }
 
-    const { data: tasks, error: taskError, isLoading: taskIsLoading } = taskApi.useFetchTasksQuery(listId);
+  const {
+    data: tasks,
+    error: taskError,
+    isLoading: taskIsLoading,
+  } = taskApi.useFetchTasksQuery(listId)
 
- 
-
-  const handleMoveTask = async (listId: number, taskId: number, newListId: number) => {
-
+  const handleMoveTask = async (
+    listId: number,
+    taskId: number,
+    newListId: number,
+  ) => {
     try {
-        console.log('listId1', listId);
-        console.log('taskId1', taskId);
-        console.log('newTaskId1', newListId);
-
-    const response =  moveTask({ listId, taskId, newListId });
-
-    console.log('response', response);
+      const response = moveTask({ listId, taskId, newListId })
     } catch (error) {
-        console.error('An error occurred:', error);
+      console.error('An error occurred:', error)
     }
-  };
+  }
 
+  const [deleteTask, {}] = taskApi.useDeleteTaskMutation()
 
-    const [deleteTask, {}] = taskApi.useDeleteTaskMutation();
+  const handleRemove = (task: ITask) => {
+    deleteTask({ taskId: Number(task.id), listId })
+  }
 
-    const handleRemove = (task: ITask) => {
-        deleteTask({ taskId: Number(task.id), listId }); 
-    };
-    
-    const [updateTask, {}] = taskApi.useUpdateTaskMutation();
+  const [updateTask, {}] = taskApi.useUpdateTaskMutation()
+  const handleUpdate = (task: ITask) => {
+    updateTask({ taskId: Number(task.id), listId, task })
+  }
 
-    const handleUpdate = (task: ITask) => {
-     
-        updateTask({taskId: Number(task.id), listId, task}); 
-    };
+  return (
+    <div>
+      {taskIsLoading && <div>Loading tasks...</div>}
+      {taskError && <div>Error fetching tasks</div>}
+      {tasks &&
+        tasks.map((task: ITask) => (
+          <TaskItem
+            remove={handleRemove}
+            update={handleUpdate}
+            move={handleMoveTask}
+            key={task.id}
+            task={task}
+          />
+        ))}
+    </div>
+  )
+}
 
-
-    return (
-        <div>
-            {taskIsLoading && <div>Loading tasks...</div>}
-            {taskError && <div>Error fetching tasks</div>}
-            {tasks && tasks.map((task: ITask) => (
-                <TaskItem remove={handleRemove} update={handleUpdate} move = {handleMoveTask}  key={task.id} task={task}/>
-            ))}
-        </div>
-    );
-};
-
-export default TaskList;
+export default TaskList

@@ -38,7 +38,6 @@ export class TaskController {
         return this.taskService.moveTask(id, listId, newListId);
     }
 
-
     @Delete('task/:id')
     async deleteTask(
         @Param('id') id: number,

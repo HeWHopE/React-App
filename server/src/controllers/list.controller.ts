@@ -16,8 +16,6 @@ export class ListController {
     return this.listService.getTaskListById(id);
   }
 
-
-
   @Post('list')
   async createTaskList(@Body() createListDto: List) {
     return this.listService.createTaskList(createListDto);

@@ -16,10 +16,9 @@ export class ActivityLogService {
   
     await this.entityManager.query(query, [actionType, actionDescription, fromColumn, toColumn]);
   }
-  
 
   async getActivityLogs() {
-    return this.entityManager.query('SELECT * FROM activity_log');
+    return this.entityManager.query('SELECT * FROM activity_log ORDER BY timestamp DESC LIMIT 10');
   }
 
 }

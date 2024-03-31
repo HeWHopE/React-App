@@ -1,0 +1,65 @@
+/* App.css */
+
+/* Navbar styles */
+.navbar {
+  background-color: #333; /* Background color for the navbar */
+  padding: 10px 20px; /* Padding for the navbar */
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Navbar buttons styles */
+.navbar-buttons {
+  display: flex;
+  gap: 10px; /* Gap between navbar buttons */
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 998; /* Ensure it appears below the modal */
+  cursor: pointer;
+}
+
+.navbar-button {
+  background-color: #555; /* Button background color */
+  color: #fff; /* Text color */
+  padding: 10px 20px; /* Padding */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add border radius */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+/* Hover effect */
+.navbar-button:hover {
+  background-color: #777; /* Change background color on hover */
+}
+
+.navbar-title {
+  color: #fff; /* Text color */
+  font-size: 24px; /* Font size */
+}
+
+/* Media queries for responsiveness */
+@media screen and (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column; /* Change to column layout for smaller screens */
+  }
+
+  .navbar-buttons {
+    margin-top: 10px; /* Add margin to separate buttons */
+  }
+
+  .navbar-button {
+    width: 100%; /* Make buttons full width */
+  }
+}

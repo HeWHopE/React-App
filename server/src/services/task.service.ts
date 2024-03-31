@@ -46,7 +46,7 @@ export class TaskService {
     // Log the activity
     const activityLog = new ActivityLog();
     activityLog.actionType = 'create';
-    activityLog.actionDescription = `You added ${newTask.name} to the ${newTask.column_name}`;
+    activityLog.actionDescription = `You added ${newTask.name} to the ${newTask.list_name}`;
     activityLog.timestamp = new Date();
     await this.activityLogService.logActivity(activityLog);
 
@@ -56,12 +56,38 @@ export class TaskService {
 
 
     async updateTask(id: number, listId: number, updatedTask: Task): Promise<Task | undefined> {
-      console.log('updatedTask', updatedTask);
+      const { name, description, due_date, priority, list_name } = updatedTask;
+
+     
     const existingTask = await this.getTask(id, listId);
 
+      console.log(typeof existingTask.list_name, 'existingTask.list_name');
+      console.log(typeof updatedTask.list_name, 'updatedTask.list_name');
+
+      console.log('existingTask', existingTask);
+      console.log('updatedTask', updatedTask);
+      
     if (!existingTask || existingTask === updatedTask) {
         return;
     }
+    
+  const updatedTaskOnlyDate = await this.entityManager.query(
+    'UPDATE tasks SET due_date = $1  WHERE id = $2 AND list_id = $3 RETURNING *',
+    [due_date, id, listId]
+  );
+  
+  const existingDueDate = new Date(existingTask.due_date);
+  const updatedDueDate = updatedTaskOnlyDate[0][0].due_date;
+
+  if (existingDueDate.getTime() === updatedDueDate.getTime()) {
+    console.log('Date not changed here');
+  } else {
+    const activityLog = new ActivityLog();
+    activityLog.actionType = 'update';
+    activityLog.actionDescription = `You updated the due date of ${existingTask.name}`;
+    activityLog.timestamp = new Date();
+    await this.activityLogService.logActivity(activityLog);
+  }
 
     const logActivityIfChanged = async (propertyName: string, newValue: any, actionDescription: string) => {
         if (existingTask[propertyName] !== newValue) {
@@ -72,17 +98,14 @@ export class TaskService {
             await this.activityLogService.logActivity(activityLog);
         }
     };
-    
+
     await Promise.all([
-        
         logActivityIfChanged('description', updatedTask.description, `You updated the description of ${existingTask.name}`),
-        logActivityIfChanged('due_date', updatedTask.due_date, `You updated the due date of ${existingTask.name}`),
         logActivityIfChanged('priority', updatedTask.priority, `You changed the priority ${existingTask.name} from ${existingTask.priority} to ${updatedTask.priority}`),
-        logActivityIfChanged('listName', updatedTask.list_name, `You moved ${existingTask.name} from ${existingTask.list_name} to ${updatedTask.list_name}`),
+        logActivityIfChanged('list_name', updatedTask.list_name, `You moved ${existingTask.name} from ${existingTask.list_name} to ${updatedTask.list_name}`),
         logActivityIfChanged('name', updatedTask.name, `You renamed ${existingTask.name} to ${updatedTask.name}`),
     ]); 
 
-    const { name, description, due_date, priority, list_name } = updatedTask;
     const [updatedTaskRecord] = await this.entityManager.query(
         'UPDATE tasks SET name = $1, description = $2, due_date = $3, priority = $4, list_name = $5 WHERE id = $6 AND list_id = $7 RETURNING *',
         [name, description, due_date, priority, list_name, id, listId]
@@ -90,6 +113,8 @@ export class TaskService {
 
     return updatedTaskRecord;
 }
+
+
   
   async deleteTask(id: number, listId: number): Promise<Task | undefined> {
     const chosenTask = await this.getTask(id, listId);

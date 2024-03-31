@@ -1,0 +1,72 @@
+.history-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px; 
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+}
+
+.history-modal.open {
+  transform: translateX(0);
+}
+
+.history-modal-content {
+  padding: 20px;
+
+    max-height: calc(100% - 60px); /* Adjust as needed */
+    overflow-y: auto;
+  
+}
+
+/* Navbar styles */
+.history-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #7d7171;
+  padding: 10px 20px;
+}
+
+.history-navbar h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.history-navbar button {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #e1e6eb;
+}
+
+
+.history-item-list {
+  margin-left: 20px;
+  padding: 0;
+}
+
+.history-item-list li {
+  margin-bottom: 10px;
+}
+
+.history-item-list li div {
+  padding-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.history-item-list li div:first-child {
+  
+  font-weight: bold;
+}
+
+.history-item-list li div:last-child {
+  font-style: italic;
+}

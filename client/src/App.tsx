@@ -1,28 +1,46 @@
-import React, { useEffect } from 'react';
-
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import './styles/App.css';
 import { useSelector } from 'react-redux';
 import { useAppSelector } from './hooks/useAppDispatch';
 import { userSlice } from './store/reducers/UserSlice';
 import { useAppDispatch } from './hooks/useAppDispatch';
 import { fetchLists } from './store/reducers/ActionCreator';
-import MyButtons from './components/MyButtons';
-
+import HistoryButton from './components/historyButton';
 import ListContainer from './components/listContainer';
+import CreateListButton from './components/createListButton';
+import HistoryModal from './components/historyModal';
+import { useFetchActivityQuery } from './services/ActivityService';
 
 function App() {
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const { data: activities, refetch } = useFetchActivityQuery();
 
-  const {lists, isLoading, error} = useAppSelector(state => state.userReducer);
-  const dispatch = useAppDispatch();
+  const handleRefresh = () => {
+    refetch();
+      }
 
- useEffect(() => {
-    dispatch(fetchLists());
-}, [])
+  const handleOpenHistoryModal = () => {
+    setIsHistoryModalOpen(true);
+  };
+
+  const handleCloseHistoryModal = () => {
+    setIsHistoryModalOpen(false);
+  };
 
   return (
     <div className="App">
-        <MyButtons />
-            <ListContainer />
+      <nav className="navbar">
+        <div className="navbar-container">
+          <div className="navbar-title">My Task Board</div>
+          <div className="navbar-buttons">
+            <CreateListButton />
+            <HistoryButton onClick={() => { handleOpenHistoryModal(); handleRefresh(); }} />
+          </div>
+        </div>
+      </nav>
+      <HistoryModal isOpen={isHistoryModalOpen} onClose={handleCloseHistoryModal} activities={activities}/>
+      {isHistoryModalOpen && <div className="overlay" onClick={handleCloseHistoryModal}></div>}
+      <ListContainer />
     </div>
   );
 }

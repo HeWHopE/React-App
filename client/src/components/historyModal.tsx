@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/historyModal.css'
-import { useFetchActivityQuery } from '../services/ActivityService'
 
 interface HistoryModalProps {
   isOpen: boolean

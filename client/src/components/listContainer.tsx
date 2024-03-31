@@ -1,5 +1,3 @@
-import React from 'react'
-import { BsArrowClockwise } from 'react-icons/bs'
 import CircleItem from './CircleItem'
 import ListItem from './ListItem'
 import TaskList from './taskList'

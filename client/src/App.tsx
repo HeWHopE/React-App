@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 import './styles/App.css'
-import { useSelector } from 'react-redux'
-import { useAppSelector } from './hooks/useAppDispatch'
-import { userSlice } from './store/reducers/UserSlice'
-import { useAppDispatch } from './hooks/useAppDispatch'
-import { fetchLists } from './store/reducers/ActionCreator'
+
 import HistoryButton from './components/historyButton'
 import ListContainer from './components/listContainer'
 import CreateListButton from './components/createListButton'

@@ -140,19 +140,9 @@ export class TaskService {
 
   async moveTask (id: number, listId: number, newListId: number): Promise<Task | undefined> {
     const task = await this.getTask(id, listId);
-
-    console.log('here we are');
-
-    console.log('task', task);
-
-    console.log('listId', listId);
-    console.log('newListId', newListId);
-
-
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} in list with ID ${listId} not found.`);
   }
-
 
     const [movedTask] = await this.entityManager.query(
       'UPDATE tasks SET list_id = $1 WHERE id = $2 AND list_id = $3 RETURNING *',
@@ -180,7 +170,6 @@ export class TaskService {
     activityLog.actionDescription = `You moved ${task.name} from ${task.list_name} to ${ taskNewList.name}`;
     activityLog.timestamp = new Date();
     await this.activityLogService.logActivity(activityLog);
-
     return movedTask;
   }
 }

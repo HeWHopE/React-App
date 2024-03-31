@@ -9,6 +9,7 @@ import TaskModal from './taskModal';
 import { IList } from '../models/IList';
 import { useFetchListsQuery } from '../services/ListService';
 
+
 interface TaskItemProps {
   task: ITask;
   remove: (task: ITask) => void;
@@ -27,7 +28,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move}) => {
   const [error, setError] = useState('');
 
   const { data: lists, error: listError, isLoading: listIsLoading } = useFetchListsQuery();
-
 
   const togglePopup = () => {
     setShowPopup(!showPopup);
@@ -52,14 +52,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move}) => {
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newListId = event.target.value; // Get the selected list's ID
-    console.log(newListId, 'newListId')
-
-    console.log(task, 'task')
-
-    console.log(task.list_id, 'task.list_Id')
-    console.log(task.id, 'task.id')
-
-
+   
     move(Number(task.list_id), Number(task.id), Number(newListId)); // Save the updated task
   };
 
@@ -114,8 +107,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move}) => {
           </span>
         </div>
         <div>
-        <select value={task.list_id} onChange={handleSelectChange} onClick={handleSelectClick}>
-  <option value="1" >Select a list</option>
+        <select className="select"  value={task.list_id} onChange={handleSelectChange} onClick={handleSelectClick}>
+  <option value="1" >Move to</option>
   {lists && lists
     .filter((list: IList) => list.id !== task.list_id) // Exclude the task's own list
     .map((list: IList) => (

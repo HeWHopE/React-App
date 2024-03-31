@@ -3,11 +3,11 @@ import { taskApi } from '../services/TaskService';
 import TaskItem from './taskItem';
 import { ITask } from '../models/ITask';
 import { IList } from '../models/IList';
-import { useMoveTaskMutation } from '../services/moveService';
+import { useMoveTaskMutation } from '../services/TaskService';
 
 interface TaskListProps {
     listId?: number; 
- 
+  
 }
 
 const TaskList: React.FC<TaskListProps> = ({ listId}) => {

@@ -106,3 +106,56 @@
   .task-buttons:hover {
     cursor: pointer; /* Change cursor to pointer when hovering over the dots */
 }
+
+
+
+/* Select container */
+.select-container {
+  position: relative;
+}
+
+/* Select element */
+.select {
+  appearance: none; /* Remove default appearance */
+  padding: 8px 12px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 4px; /* Add border radius */
+  width: 200px; /* Adjust width */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+/* Dropdown arrow icon */
+.select::after {
+  content: '▼'; /* Unicode for downward-pointing triangle */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Ensure dropdown arrow doesn't interfere with clicking the select */
+}
+
+/* Options container */
+.select-options {
+  position: absolute;
+  top: calc(100% + 5px); /* Position options below select */
+  left: 0;
+  z-index: 1000; /* Ensure options appear above other elements */
+  background-color: #fff; /* Add background color */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 4px; /* Add border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+  display: none; /* Hide options by default */
+}
+
+/* Option */
+.select-option {
+  padding: 8px 12px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+/* Option hover */
+.select-option:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+}

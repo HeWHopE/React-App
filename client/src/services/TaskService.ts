@@ -1,6 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ITask } from '../models/ITask';
 
+
+interface FetchActivityResponse {
+    taskId: number;
+    listId: number;    
+    newListId: number;
+}
+
+
 export const taskApi = createApi({
     
     reducerPath: 'taskApi',
@@ -38,9 +46,18 @@ export const taskApi = createApi({
                 method: 'DELETE'
             }),
             invalidatesTags: ['Task']
-        })
+        }),
+        moveTask: build.mutation<{ listId: number; taskId: number; newListId: number }, FetchActivityResponse>({
+            query: ({ listId, taskId, newListId }) => ({
+              url: `/moveTask/${taskId}?listId=${listId}&newListId=${newListId}`,
+              method: 'PUT',
+            }),
+            invalidatesTags: ['Task'],
+          }),
+
 
     }),
 });
 
-export const { useFetchTasksQuery, usePostTaskMutation } = taskApi;
+export const { useFetchTasksQuery, usePostTaskMutation, useMoveTaskMutation } = taskApi;
+

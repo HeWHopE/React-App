@@ -29,6 +29,15 @@ export class TaskController {
         return this.taskService.updateTask(id, listId, task);
     }
 
+    @Put('moveTask/:id')
+    async moveTask(
+        @Param('id') id: number,
+        @Query('listId') listId: number,
+        @Query('newListId') newListId: number
+    ) {
+        return this.taskService.moveTask(id, listId, newListId);
+    }
+
 
     @Delete('task/:id')
     async deleteTask(
@@ -37,6 +46,7 @@ export class TaskController {
     ) {
         return this.taskService.deleteTask(id, listId);
     }
+
 
 
 }

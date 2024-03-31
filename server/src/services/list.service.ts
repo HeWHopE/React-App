@@ -7,6 +7,27 @@ export class ListService {
   constructor(private readonly entityManager: EntityManager) {}
 
 
+  async getTaskListById(id: number)
+  {
+    try {
+      const [taskList] = await this.entityManager.query(
+        'SELECT * FROM task_lists WHERE id = $1',
+        [id],
+      );
+      if (taskList) {
+        return taskList;
+      } else {
+        throw new NotFoundException('Task list with the provided ID does not exist');
+      }
+    } catch (error) {
+      // Handle database query errors
+      throw new Error('Failed to fetch task list from the database');
+    }
+  }
+
+
+
+
   async getAllTaskLists() {
     try {
 

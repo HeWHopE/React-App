@@ -5,6 +5,11 @@ import { ActivityLogService } from './activity-log.service';
 import { ActivityLog } from '../entities/activity-log.entity';
 import { CreateTaskDto } from 'src/dtos/taskDto.dto';
 import { validate } from 'class-validator';
+
+
+
+
+
 @Injectable()
 export class TaskService {
     constructor(
@@ -130,5 +135,40 @@ export class TaskService {
     this.activityLogService.logActivity(activityLog);
 
     return deletedTask;
+  }
+
+
+  async moveTask (id: number, listId: number, newListId: number): Promise<Task | undefined> {
+    const task = await this.getTask(id, listId);
+    
+    if (!task) {
+      return;
+    }
+
+    const [movedTask] = await this.entityManager.query(
+      'UPDATE tasks SET list_id = $1 WHERE id = $2 AND list_id = $3 RETURNING *',
+      [newListId, id, listId]
+    );
+
+    await this.entityManager.query(
+      'UPDATE tasks SET list_name = (SELECT name FROM task_lists WHERE id = $1) WHERE id = $2',
+      [newListId, id]
+  );
+
+
+    const [taskList] = await this.entityManager.query(
+      'SELECT * FROM task_lists WHERE id = $1',
+      [listId],
+    );
+
+    
+   
+    const activityLog = new ActivityLog();
+    activityLog.actionType = 'move';
+    activityLog.actionDescription = `You moved ${task.name} from ${task.list_name} to ${ taskList.name}`;
+    activityLog.timestamp = new Date();
+    await this.activityLogService.logActivity(activityLog);
+
+    return movedTask;
   }
 }

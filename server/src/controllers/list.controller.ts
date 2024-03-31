@@ -11,6 +11,13 @@ export class ListController {
     return this.listService.getAllTaskLists();
   }
 
+  @Get('list/:id')
+  async getTaskListById(@Param('id') id: number) {
+    return this.listService.getTaskListById(id);
+  }
+
+
+
   @Post('list')
   async createTaskList(@Body() createListDto: List) {
     return this.listService.createTaskList(createListDto);

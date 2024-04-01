@@ -12,9 +12,11 @@ interface TaskModalProps {
   onTaskPriorityChange: (value: string) => void
   onCreateTask: () => void
   text: string
+  viewStyle: boolean
 }
 
 const TaskModal: React.FC<TaskModalProps> = ({
+  viewStyle,
   task,
   text,
   isOpen,
@@ -64,6 +66,62 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setTaskPriority(value)
     onTaskPriorityChange(value)
   }
+
+  if(viewStyle && task)
+    {
+      return (
+        <>
+          {isOpen && (
+            <div className="modal-container-view" onClick={onClose}>
+              <div className="modal-view" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-header-view">
+                  <h2 className="modal-title">{text}</h2>
+                  <button className="exit-button" onClick={onClose}>
+                    X
+                  </button>
+                </div>
+                <div className="modal-content-view">
+                  <div className="modal-task-details">
+                  <div className="description-container">
+  <h3>{task.name}</h3>
+  <div className="description-info">
+    <div className="label" style={{ color: "#797E96" }}>Status:</div>
+    <div className="value">{task.list_name}</div>
+  </div>
+  <div className="description-info">
+    <div className="label" style={{ color: "#797E96" }}>Due date:</div>
+    <div className="value">{task.due_date}</div>
+  </div>
+  <div className="description-info">
+    <div className="label" style={{ color: "#797E96" }}>Priority:</div>
+    <div className="value">{task.priority}</div>
+  </div>
+
+  <div className='description'>Description:</div>
+    <div className="value">{task.description}</div>
+</div>
+                  </div>
+                  <div className="modal-activity">
+                    <div className="field-activity-title">
+                      <h3>Activity</h3>
+                    </div>
+                    <div className="activity-item">
+                      <p>Activity 1</p>
+                      <p>Details of activity 1</p>
+                    </div>
+                    <div className="activity-item">
+                      <p>Activity 2</p>
+                      <p>Details of activity 2</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    }
+
 
   return (
     <>

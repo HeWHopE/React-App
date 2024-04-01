@@ -126,6 +126,7 @@ const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
           onTaskPriorityChange={setTaskPriority}
           onCreateTask={handleCreate}
           text="Edit Task"
+          viewStyle={false}
         />
       )}
     </div>

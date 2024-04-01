@@ -6,7 +6,6 @@ import { BiCalendarCheck } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
 import { BsFillTrash3Fill } from 'react-icons/bs'
 import TaskModal from './taskModal'
-import ViewModal from './viewModal' // Import ViewModal component
 import { IList } from '../models/IList'
 import { useFetchListsQuery } from '../services/ListService'
 
@@ -32,6 +31,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     isLoading: listIsLoading,
   } = useFetchListsQuery()
 
+
+  const [isModalOpen1, setIsModalOpen1] = useState(false) // State for ViewModal
+
   const togglePopup = () => {
     setShowPopup(!showPopup)
   }
@@ -54,6 +56,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
   const handleEditClick = () => {
     setIsModalOpen(true)
   }
+
+  const handleEditClick1 = () => {
+    setIsModalOpen1(true)
+  }
+
 
   const handleSelectClick = (
     event: React.MouseEvent<HTMLSelectElement, MouseEvent>,
@@ -94,12 +101,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     <div
       className="task-item"
       onClick={() => {
-        handleViewClick()
+        handleEditClick1()
       }}
     >
       <div className="task-header">
         <div className="task-name">{task.name}</div>
-        <div className="task-buttons" onClick={togglePopup}>
+        <div className="task-buttons"onClick={(event) => { event.stopPropagation(); togglePopup(); }}>
           <BsThreeDotsVertical />
         </div>
       </div>
@@ -141,8 +148,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
         </div>
       </div>
       {showPopup && (
-        <div className="popup">
-          <div className="Edit" onClick={handleEditClick}>
+        <div className="popup" onClick={(event) => { event.stopPropagation();}}>
+  <div className="Edit" onClick={(event) => { event.stopPropagation();; handleEditClick(); }}>
             <FiEdit />
             Edit
           </div>
@@ -152,6 +159,25 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
           </div>
         </div>
       )}
+       {isModalOpen1 && (
+        <TaskModal
+          task={task}
+          isOpen={isModalOpen1}
+          onClose={() => {
+            setIsModalOpen1(false)
+            togglePopup()
+          }}
+          error={error}
+          onTaskNameChange={setTaskName}
+          onTaskDescriptionChange={setTaskDescription}
+          onTaskDueDateChange={setTaskDueDate}
+          onTaskPriorityChange={setTaskPriority}
+          onCreateTask={handleUpdate}
+          text="View Task"
+          viewStyle={true}
+        />
+      )}
+
       {isModalOpen && (
         <TaskModal
           task={task}
@@ -167,6 +193,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
           onTaskPriorityChange={setTaskPriority}
           onCreateTask={handleUpdate}
           text="Edit Task"
+          viewStyle={false}
         />
       )}
     </div>

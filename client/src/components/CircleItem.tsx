@@ -71,6 +71,7 @@ const CircleItem: React.FC<CircleItemProps> = ({ listId }) => {
           onTaskPriorityChange={setTaskPriority}
           onCreateTask={handleCreate}
           text="Create Task"
+          viewStyle={false}
         />
       )}
     </div>

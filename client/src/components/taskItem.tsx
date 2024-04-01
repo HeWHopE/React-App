@@ -60,6 +60,27 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     setIsModalOpen1(true)
   }
 
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const month = months[date.getMonth()]
+    const day = date.getDate()
+    return `${month} ${day}`
+  }
+
   const handleSelectClick = (
     event: React.MouseEvent<HTMLSelectElement, MouseEvent>,
   ) => {
@@ -70,6 +91,15 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     const newListId = event.target.value
 
     move(Number(task.list_id), Number(task.id), Number(newListId))
+  }
+
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const hour = date.getHours()
+    const minutes = date.getMinutes()
+    const amPm = hour >= 12 ? 'pm' : 'am'
+    const formattedHour = hour % 12 || 12
+    return `${formattedHour}:${minutes < 10 ? '0' : ''}${minutes} ${amPm}`
   }
 
   const handleUpdate = () => {
@@ -124,7 +154,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
           <span className="due-date-icon">
             <BiCalendarCheck />
           </span>
-          {new Date(task.due_date).toLocaleDateString()}
+          {formatDate(task.due_date.toLocaleString())}
         </div>
         <div className="task-priority">
           <span className="priority-badge">

@@ -1,6 +1,6 @@
 .task-item {
-  display: flex; /* Use flexbox layout */
-  flex-direction: column; /* Stack child elements vertically */
+  display: flex; 
+  flex-direction: column; 
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 10px;
@@ -9,7 +9,7 @@
 }
 
 .task-header {
-  display: flex; /* Use flexbox layout */
+  display: flex; 
   justify-content: space-between;
   align-items: center;
 }
@@ -19,10 +19,10 @@
 }
 
 .task-details {
-  display: flex; /* Use flexbox layout */
-  flex-direction: column; /* Stack child elements vertically */
+  display: flex; 
+  flex-direction: column; 
   margin-top: 10px;
-  flex-shrink: 0; /* Prevent container from shrinking */
+  flex-shrink: 0; 
   max-width: 200px;
 }
 
@@ -34,61 +34,61 @@
 }
 
 .task-due-date {
-  display: flex; /* Use flexbox layout */
-  align-items: center; /* Vertically center the content */
-  margin-top: 5px; /* Adjust margin as needed */
+  display: flex; 
+  align-items: center; 
+  margin-top: 5px; 
   color: #6f7791;
 }
 
 .due-date-icon {
-  margin-right: 5px; /* Adjust margin between icon and text */
+  margin-right: 5px; 
   color: black;
 }
 
 .task-priority {
   padding-top: 10px;
-  display: flex; /* Use flexbox layout for better alignment */
-  align-items: center; /* Vertically center the dot and priority text */
+  display: flex; 
+  align-items: center; 
 }
 
 .priority-badge {
-  display: flex; /* Use flexbox layout to wrap dot and text */
-  align-items: center; /* Vertically center the dot and text */
-  background-color: #f3f4f6; /* Background color of the oval */
-  border-radius: 20px; /* Adjust border radius to create an oval */
-  padding: 3px 8px; /* Add padding around dot and text */
+  display: flex; 
+  align-items: center; 
+  background-color: #f3f4f6; 
+  border-radius: 20px; 
+  padding: 3px 8px; 
 }
 
 .dot {
-  width: 6px; /* Size of the dot */
+  width: 6px; 
   height: 6px;
-  border-radius: 50%; /* Make the dot circular */
-  background-color: #818bb1; /* Color of the dot */
-  margin-right: 5px; /* Spacing between the dot and priority text */
-  flex-shrink: 0; /* Prevent the dot from shrinking */
+  border-radius: 50%; 
+  background-color: #818bb1; 
+  margin-right: 5px; 
+  flex-shrink: 0; 
 }
 
 .priority-text {
-  font-size: 0.8em; /* Adjust the font size to make the priority text smaller */
+  font-size: 0.8em; 
   color: #9399ac;
 }
 
 .task-item {
-  position: relative; /* Make the container position relative */
+  position: relative; 
 }
 
 .popup {
-  position: absolute; /* Make the popup position absolute */
-  right: 0; /* Position the popup on the right side of the task */
+  position: absolute; 
+  right: 0; 
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 8px;
-  z-index: 100; /* Ensure the popup appears above other content */
+  z-index: 100; 
 }
 
-/* Additional styling for the popup items */
+
 .popup > div {
   padding: 4px 8px;
   cursor: pointer;
@@ -99,55 +99,58 @@
 }
 
 .task-buttons:hover {
-  cursor: pointer; /* Change cursor to pointer when hovering over the dots */
+  cursor: pointer; 
 }
 
-/* Select container */
+
 .select-container {
   position: relative;
 }
 
-/* Select element */
+
 .select {
-  appearance: none; /* Remove default appearance */
-  padding: 8px 12px; /* Adjust padding */
-  font-size: 16px; /* Adjust font size */
-  border: 1px solid #ccc; /* Add border */
-  border-radius: 4px; /* Add border radius */
-  width: 200px; /* Adjust width */
-  cursor: pointer; /* Change cursor on hover */
+  appearance: none; 
+  margin-top: 6px;
+  padding: 5px; 
+  font-size: 16px; 
+  border: 1px solid #ccc; 
+  border-radius: 10px; 
+  width: 200px; 
+  cursor: pointer; 
+  background-color: #e1e3ea;
 }
 
-/* Dropdown arrow icon */
+
 .select::after {
-  content: '▼'; /* Unicode for downward-pointing triangle */
+  content: '▼'; 
   position: absolute;
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  pointer-events: none; /* Ensure dropdown arrow doesn't interfere with clicking the select */
+  pointer-events: none; 
 }
 
-/* Options container */
+
 .select-options {
   position: absolute;
-  top: calc(100% + 5px); /* Position options below select */
+  top: calc(100% + 5px); 
   left: 0;
 
-  background-color: #fff; /* Add background color */
-  border: 1px solid #ccc; /* Add border */
-  border-radius: 4px; /* Add border radius */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
-  display: none; /* Hide options by default */
+  background-color: #fff; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  display: none; 
 }
 
 .select-option {
-  padding: 8px 12px; /* Adjust padding */
-  font-size: 16px; /* Adjust font size */
-  cursor: pointer; /* Change cursor on hover */
+  padding: 8px 12px; 
+  font-size: 16px; 
+  cursor: pointer; 
 }
 
-/* Option hover */
+
 .select-option:hover {
-  background-color: #f0f0f0; /* Change background color on hover */
+  background-color: #e41d1d; 
 }
+

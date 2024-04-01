@@ -132,7 +132,10 @@ const TaskModal: React.FC<TaskModalProps> = ({
                       <div className="label" style={{ color: '#797E96' }}>
                         <BsCalendar2 style={{ marginRight: '5px' }} /> Due date
                       </div>
-                      <div className="value">{task.due_date}</div>
+                      <div className="value">
+                        {formatDate(task.due_date.toLocaleString())} at{' '}
+                        {formatTime(task.due_date.toLocaleString())}
+                      </div>
                     </div>
                     <div className="description-info">
                       <div className="label" style={{ color: '#797E96' }}>

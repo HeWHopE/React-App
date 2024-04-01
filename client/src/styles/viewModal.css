@@ -1,6 +1,6 @@
-/* viewModal.css */
+
 .modal {
-  display: none; /* Hide the modal by default */
+  display: none; 
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -8,16 +8,16 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.4); 
 }
 
 .modal.open {
-  display: block; /* Show the modal when isOpen is true */
+  display: block; 
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 20% auto; /* Center the modal vertically and horizontally */
+  margin: 20% auto; 
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -42,3 +42,4 @@
 h2 {
   margin-top: 0;
 }
+

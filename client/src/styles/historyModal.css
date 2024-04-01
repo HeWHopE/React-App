@@ -18,11 +18,11 @@
 .history-modal-content {
   padding: 20px;
 
-  max-height: calc(100% - 60px); /* Adjust as needed */
+  max-height: calc(100% - 60px); 
   overflow-y: auto;
 }
 
-/* Navbar styles */
+
 .history-navbar {
   display: flex;
   justify-content: space-between;
@@ -67,3 +67,4 @@
 .history-item-list li div:last-child {
   font-style: italic;
 }
+

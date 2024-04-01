@@ -105,10 +105,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
     onTaskPriorityChange(value)
   }
 
-  const handleRefresh = () => {
-    refetch()
-  }
-
   if (viewStyle && task) {
     return (
       <>

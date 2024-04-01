@@ -5,4 +5,5 @@ export interface ActivityLog {
   fromColumn: string
   toColumn: string
   timestamp: Date
+  task_id: number
 }

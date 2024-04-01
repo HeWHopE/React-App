@@ -62,10 +62,8 @@ export class TaskService {
 
     async updateTask(id: number, listId: number, updatedTask: Task): Promise<Task | undefined> {
       const { name, description, due_date, priority, list_name } = updatedTask;
-
      
     const existingTask = await this.getTask(id, listId);
-
   
     if (!existingTask || existingTask === updatedTask) {
         return;
@@ -86,15 +84,17 @@ export class TaskService {
     activityLog.actionType = 'update';
     activityLog.actionDescription = `You updated the due date of ${existingTask.name}`;
     activityLog.timestamp = new Date();
+    activityLog.task_id = id;
     await this.activityLogService.logActivity(activityLog);
   }
-
+  
     const logActivityIfChanged = async (propertyName: string, newValue: any, actionDescription: string) => {
         if (existingTask[propertyName] !== newValue) {
             const activityLog = new ActivityLog();
             activityLog.actionType = 'update';
             activityLog.actionDescription = actionDescription;
             activityLog.timestamp = new Date();
+            activityLog.task_id = id;
             await this.activityLogService.logActivity(activityLog);
         }
     };

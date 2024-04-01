@@ -20,5 +20,6 @@ CREATE TABLE activity_log (
     action_description TEXT,
     from_column VARCHAR(50), 
     to_column VARCHAR(50),   
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    taskId INT INTEGER
 );

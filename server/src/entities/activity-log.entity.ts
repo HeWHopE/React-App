@@ -19,4 +19,7 @@ export class ActivityLog {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp: Date;
+
+  @Column({ nullable: true})
+  task_id: number;
 }

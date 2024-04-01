@@ -86,7 +86,7 @@
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 8px;
-  z-index: 998; /* Ensure the popup appears above other content */
+  z-index: 100; /* Ensure the popup appears above other content */
 }
 
 /* Additional styling for the popup items */

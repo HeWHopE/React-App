@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { ITask } from '../models/ITask'
+import { BsBullseye } from "react-icons/bs";
+import { BsCalendar2 } from "react-icons/bs";
+import { MdPriorityHigh } from 'react-icons/md';
+import { useFetchActivityQuery } from '../services/ActivityService'
 
 interface TaskModalProps {
   task?: ITask
@@ -33,6 +37,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [taskDueDate, setTaskDueDate] = useState('')
   const [taskPriority, setTaskPriority] = useState('')
 
+const { data: activities, refetch } = useFetchActivityQuery()
+
   useEffect(() => {
     if (task) {
       setTaskName(task.name)
@@ -51,6 +57,38 @@ const TaskModal: React.FC<TaskModalProps> = ({
     setTaskName(value)
     onTaskNameChange(value)
   }
+
+  
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const month = months[date.getMonth()]
+    const day = date.getDate()
+    return `${month} ${day}`
+  }
+
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp)
+    const hour = date.getHours()
+    const minutes = date.getMinutes()
+    const amPm = hour >= 12 ? 'pm' : 'am'
+    const formattedHour = hour % 12 || 12
+    return `${formattedHour}:${minutes < 10 ? '0' : ''}${minutes} ${amPm}`
+  }
+
 
   const handleTaskDescriptionChange = (value: string) => {
     setTaskDescription(value)
@@ -85,34 +123,53 @@ const TaskModal: React.FC<TaskModalProps> = ({
                   <div className="description-container">
   <h3>{task.name}</h3>
   <div className="description-info">
-    <div className="label" style={{ color: "#797E96" }}>Status:</div>
-    <div className="value">{task.list_name}</div>
+  <div className="label" style={{ color: "#797E96" }}>
+    <BsBullseye style={{ marginRight: '5px' }} />Status
   </div>
-  <div className="description-info">
-    <div className="label" style={{ color: "#797E96" }}>Due date:</div>
-    <div className="value">{task.due_date}</div>
+  <div className="value">{task.list_name}</div>
+</div>
+<div className="description-info">
+  <div className="label" style={{ color: "#797E96" }}>
+    <BsCalendar2 style={{ marginRight: '5px' }} /> Due date
   </div>
-  <div className="description-info">
-    <div className="label" style={{ color: "#797E96" }}>Priority:</div>
-    <div className="value">{task.priority}</div>
+  <div className="value">{task.due_date}</div>
+</div>
+<div className="description-info">
+  <div className="label" style={{ color: "#797E96" }}>
+    <MdPriorityHigh style={{ marginRight: '5px' }} />Priority
   </div>
+  <div className="value">{task.priority}</div>
+</div>
 
   <div className='description'>Description:</div>
     <div className="value">{task.description}</div>
 </div>
                   </div>
                   <div className="modal-activity">
-                    <div className="field-activity-title">
-                      <h3>Activity</h3>
+                  <div className="field-activity-title">
+                  {activities &&
+  activities
+    .filter((activity) => {
+      const activityTaskId = Number(activity.task_id);
+      const taskId = Number(task.id);
+      return !isNaN(activityTaskId) && activityTaskId === taskId;
+    })
+    .slice(-5)
+    .map((activity) => (
+      <div key={activity.id} className="history-item">
+        <ul className="history-item-list">
+          <li>
+            <div>{activity.action_description}</div>
+          </li>
+          <div>
+            {formatDate(activity.timestamp.toLocaleString())} at{' '}
+            {formatTime(activity.timestamp.toLocaleString())}
+          </div>
+        </ul>
+      </div>
+    ))}
                     </div>
-                    <div className="activity-item">
-                      <p>Activity 1</p>
-                      <p>Details of activity 1</p>
-                    </div>
-                    <div className="activity-item">
-                      <p>Activity 2</p>
-                      <p>Details of activity 2</p>
-                    </div>
+                    
                   </div>
                 </div>
               </div>

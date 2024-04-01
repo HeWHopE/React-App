@@ -58,6 +58,7 @@ export class TaskService {
     activityLog.actionType = 'create'
     activityLog.actionDescription = `You added ${newTask.name} to the ${newTask.list_name}`
     activityLog.timestamp = new Date()
+    activityLog.task_id = newTask.id
     await this.activityLogService.logActivity(activityLog)
 
     return newTask

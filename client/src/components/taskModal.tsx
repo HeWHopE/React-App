@@ -148,6 +148,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
                 </div>
                 <div className="modal-activity">
                   <div className="field-activity-title">
+                    <h3>Activities</h3>
                     {activities &&
                       activities
                         .filter((activity) => {

@@ -31,7 +31,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     isLoading: listIsLoading,
   } = useFetchListsQuery()
 
-
   const [isModalOpen1, setIsModalOpen1] = useState(false) // State for ViewModal
 
   const togglePopup = () => {
@@ -60,7 +59,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
   const handleEditClick1 = () => {
     setIsModalOpen1(true)
   }
-
 
   const handleSelectClick = (
     event: React.MouseEvent<HTMLSelectElement, MouseEvent>,
@@ -106,7 +104,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
     >
       <div className="task-header">
         <div className="task-name">{task.name}</div>
-        <div className="task-buttons"onClick={(event) => { event.stopPropagation(); togglePopup(); }}>
+        <div
+          className="task-buttons"
+          onClick={(event) => {
+            event.stopPropagation()
+            togglePopup()
+          }}
+        >
           <BsThreeDotsVertical />
         </div>
       </div>
@@ -141,15 +145,26 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
                 .filter((list: IList) => list.id !== task.list_id) // Exclude the task's own list
                 .map((list: IList) => (
                   <option key={list.id} value={list.id}>
-                    {list.name} 
+                    {list.name}
                   </option>
                 ))}
           </select>
         </div>
       </div>
       {showPopup && (
-        <div className="popup" onClick={(event) => { event.stopPropagation();}}>
-  <div className="Edit" onClick={(event) => { event.stopPropagation();; handleEditClick(); }}>
+        <div
+          className="popup"
+          onClick={(event) => {
+            event.stopPropagation()
+          }}
+        >
+          <div
+            className="Edit"
+            onClick={(event) => {
+              event.stopPropagation()
+              handleEditClick()
+            }}
+          >
             <FiEdit />
             Edit
           </div>
@@ -159,7 +174,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
           </div>
         </div>
       )}
-       {isModalOpen1 && (
+      {isModalOpen1 && (
         <TaskModal
           task={task}
           isOpen={isModalOpen1}

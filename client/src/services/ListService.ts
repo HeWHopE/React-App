@@ -46,4 +46,3 @@ export const {
   useUpdateListMutation,
   useDeleteListMutation,
 } = listApi
-

@@ -1,12 +1,11 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ListModule } from './list.module';
-import { TaskModule } from './task.module';
-import { ActivityLogModule } from './activity-log.module';
-import * as dotenv from 'dotenv'; 
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ListModule } from './list.module'
+import { TaskModule } from './task.module'
+import { ActivityLogModule } from './activity-log.module'
+import * as dotenv from 'dotenv'
 
-
-dotenv.config();
+dotenv.config()
 
 @Module({
   imports: [

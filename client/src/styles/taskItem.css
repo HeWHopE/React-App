@@ -5,7 +5,7 @@
   border-radius: 8px;
   padding: 10px;
   margin-bottom: 10px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .task-header {
@@ -24,7 +24,6 @@
   margin-top: 10px;
   flex-shrink: 0; /* Prevent container from shrinking */
   max-width: 200px;
-  
 }
 
 .task-description {

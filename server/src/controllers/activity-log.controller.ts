@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { ActivityLogService } from '../services/activity-log.service';
-import { ActivityLog } from '../entities/activity-log.entity';
+import { Controller, Get } from '@nestjs/common'
+import { ActivityLogService } from '../services/activity-log.service'
+import { ActivityLog } from '../entities/activity-log.entity'
 
 @Controller()
 export class ActivityLogController {
@@ -8,6 +8,6 @@ export class ActivityLogController {
 
   @Get('activity')
   async getActivityLogs(): Promise<ActivityLog[]> {
-    return this.activityLogService.getActivityLogs();
+    return this.activityLogService.getActivityLogs()
   }
 }

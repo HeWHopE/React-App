@@ -1,20 +1,20 @@
 // create-task.dto.ts
-import { IsString, IsNotEmpty, IsDateString } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString } from 'class-validator'
 
 export class CreateTaskDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name: string
 
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description: string
 
   @IsDateString()
   @IsNotEmpty()
-  due_date: Date;
+  due_date: Date
 
   @IsString()
   @IsNotEmpty()
-  priority: string;
+  priority: string
 }

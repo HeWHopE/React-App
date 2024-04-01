@@ -1,25 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
 
 @Entity()
 export class ActivityLog {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  actionType: string;
+  actionType: string
 
   @Column()
-  actionDescription: string;
+  actionDescription: string
 
   @Column({ nullable: true })
-  fromColumn: string;
+  fromColumn: string
 
   @Column({ nullable: true })
-  toColumn: string;
+  toColumn: string
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  timestamp: Date;
+  timestamp: Date
 
-  @Column({ nullable: true})
-  task_id: number;
+  @Column({ nullable: true })
+  task_id: number
 }

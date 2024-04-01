@@ -60,5 +60,5 @@ export const taskApi = createApi({
   }),
 })
 
-export const { useFetchTasksQuery, usePostTaskMutation, useMoveTaskMutation,  } =
+export const { useFetchTasksQuery, usePostTaskMutation, useMoveTaskMutation } =
   taskApi

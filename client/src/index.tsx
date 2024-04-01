@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { QueryClient, QueryClientProvider } from 'react-query' 
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { setupStore } from './store/store'
 import App from './App'
 

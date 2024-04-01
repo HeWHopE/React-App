@@ -7,6 +7,5 @@ export class List {
   @Column()
   @IsNotEmpty()
   @IsString()
-  name: string;
-
+  name: string
 }

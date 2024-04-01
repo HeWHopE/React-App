@@ -12,7 +12,6 @@ DATABASE_HOST=HOST
 DATABASE_PORT=PORT
 ```
 
-
 ## Installation
 
 To install the dependencies, run the following command in the terminal:

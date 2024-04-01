@@ -41,7 +41,7 @@ const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
 
   const handleUpdate = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
-    const name = prompt() || ''
+    const name = prompt('Edit name:', list.name) || list.name;
 
     if (list.id !== undefined) {
       update({ ...list, name: name })

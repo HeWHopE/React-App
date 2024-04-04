@@ -8,7 +8,7 @@ export class ActivityLogService {
 
   async logActivity(activityLog: ActivityLog) {
     try {
-      const { actionType, actionDescription, fromColumn, toColumn, task_id } =
+      const { action_type, action_description, from_column, to_column, task_id } =
         activityLog;
 
       const query = `
@@ -17,10 +17,10 @@ export class ActivityLogService {
       `;
 
       await this.entityManager.query(query, [
-        actionType,
-        actionDescription,
-        fromColumn,
-        toColumn,
+        action_type,
+        action_description,
+        from_column,
+        to_column,
         task_id,
       ]);
     } catch (error) {

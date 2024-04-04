@@ -52,6 +52,7 @@ export class TaskService {
   ): Promise<Task> {
 
     try {
+
       const { name, description, due_date, priority } = createTaskDto
       const errors = await validate(createTaskDto)
       if (errors.length > 0) {
@@ -70,8 +71,8 @@ export class TaskService {
       )
 
       const activityLog = new ActivityLog()
-      activityLog.actionType = 'create'
-      activityLog.actionDescription = `You added ${newTask.name} to the ${newTask.list_name}`
+      activityLog.action_type = 'create'
+      activityLog.action_description = `You added ${newTask.name} to the ${newTask.list_name}`
       activityLog.timestamp = new Date()
       activityLog.task_id = newTask.id
       await this.activityLogService.logActivity(activityLog)
@@ -109,8 +110,8 @@ export class TaskService {
       if (existingDueDate.getTime() === updatedDueDate.getTime()) {
       } else {
         const activityLog = new ActivityLog()
-        activityLog.actionType = 'update'
-        activityLog.actionDescription = `You updated the due date of ${existingTask.name}`
+        activityLog.action_type = 'update'
+        activityLog.action_description = `You updated the due date of ${existingTask.name}`
         activityLog.timestamp = new Date()
         activityLog.task_id = id
         await this.activityLogService.logActivity(activityLog)
@@ -119,12 +120,12 @@ export class TaskService {
       const logActivityIfChanged = async (
         propertyName: string,
         newValue: any,
-        actionDescription: string,
+        action_description: string,
       ) => {
         if (existingTask[propertyName] !== newValue) {
           const activityLog = new ActivityLog()
-          activityLog.actionType = 'update'
-          activityLog.actionDescription = actionDescription
+          activityLog.action_type = 'update'
+          activityLog.action_description = action_description
           activityLog.timestamp = new Date()
           activityLog.task_id = id
           await this.activityLogService.logActivity(activityLog)
@@ -177,8 +178,8 @@ export class TaskService {
 
     const activityLog = new ActivityLog()
 
-    activityLog.actionType = 'delete'
-    activityLog.actionDescription = `You deleted  ${chosenTask.name} from the ${chosenTask.list_name}`
+    activityLog.action_type = 'delete'
+    activityLog.action_description = `You deleted  ${chosenTask.name} from the ${chosenTask.list_name}`
 
     activityLog.timestamp = new Date()
 
@@ -227,8 +228,8 @@ export class TaskService {
     )
 
     const activityLog = new ActivityLog()
-    activityLog.actionType = 'move'
-    activityLog.actionDescription = `You moved ${task.name} from ${task.list_name} to ${taskNewList.name}`
+    activityLog.action_type = 'move'
+    activityLog.action_description = `You moved ${task.name} from ${task.list_name} to ${taskNewList.name}`
     activityLog.timestamp = new Date()
     await this.activityLogService.logActivity(activityLog)
     return movedTask

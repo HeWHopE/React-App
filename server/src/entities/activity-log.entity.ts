@@ -1,25 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { Task } from './task.entity'; // Import Task entity
 
-@Entity()
+@Entity({ name: 'activity_log' }) // Set entity name to 'activity_log'
 export class ActivityLog {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
-  @Column()
-  actionType: string
+  @Column({ type: 'varchar', length: 50, nullable: false }) // Specify column type, length, and nullable constraint
+  @IsNotEmpty()
+  @IsString()
+  action_type: string;
 
-  @Column()
-  actionDescription: string
+  @Column({ type: 'text', nullable: true }) // Specify column type and nullable constraint
+  @IsOptional()
+  @IsString()
+  action_description: string;
 
-  @Column({ nullable: true })
-  fromColumn: string
+  @Column({ type: 'varchar', length: 50, nullable: true }) // Specify column type and nullable constraint
+  @IsOptional()
+  @IsString()
+  from_column: string;
 
-  @Column({ nullable: true })
-  toColumn: string
+  @Column({ type: 'varchar', length: 50, nullable: true }) // Specify column type and nullable constraint
+  @IsOptional()
+  @IsString()
+  to_column: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  timestamp: Date
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) // Specify column type and default value
+  timestamp: Date;
 
-  @Column({ nullable: true })
-  task_id: number
+  @Column({ type: 'int', nullable: true }) // Specify column type and nullable constraint
+  task_id: number;
+
+  @ManyToOne(() => Task, { nullable: true }) // Specify ManyToOne relationship with Task entity
+  @JoinColumn({ name: 'task_id' }) // Specify join column
+  task: Task;
 }

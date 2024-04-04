@@ -29,11 +29,14 @@ const CircleItem: React.FC<CircleItemProps> = ({ listId }) => {
         return
       }
 
+
+
       const taskData = {
         name: taskName,
         description: taskDescription,
         due_date: taskDueDate,
         priority: taskPriority,
+        list_name: "list_name"
       }
 
       await postTaskMutation({

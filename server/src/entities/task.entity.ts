@@ -1,31 +1,41 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm'
-import { IsNotEmpty, IsString, IsDateString } from 'class-validator'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { IsNotEmpty, IsString, IsDateString } from 'class-validator';
+import { taskList } from './ltaskList.entity';
 
-@Entity()
+@Entity({ name: 'tasks' }) // Set entity name to 'tasks'
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false }) // Specify column type, length, and nullable constraint
   @IsNotEmpty()
   @IsString()
-  name: string
+  name: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: true }) // Specify column type and nullable constraint
   @IsNotEmpty()
   @IsString()
-  description: string
+  description: string;
 
-  @Column({ name: 'due_date', type: 'date' })
+  @Column({ type: 'date', nullable: true }) // Specify column type and nullable constraint
   @IsNotEmpty()
   @IsDateString()
-  due_date: Date
+  due_date: Date;
 
-  @Column()
+  @Column({ type: 'varchar', length: 15, nullable: false }) // Specify column type, length, and nullable constraint
   @IsNotEmpty()
   @IsString()
-  priority: string
+  priority: string;
 
-  @Column({ nullable: true }) // Marking it nullable allows the column to have NULL values
-  list_name?: string
+  @Column({ type: 'int', nullable: false }) // Specify column type and nullable constraint
+  list_id: number;
+
+  @ManyToOne(() => taskList) // Specify ManyToOne relationship with TaskList entity
+  @JoinColumn({ name: 'list_id' }) // Specify join column
+  list: taskList;
+
+  @Column({ type: 'varchar', length: 50, nullable: false }) // Specify column type, length, and nullable constraint
+  @IsNotEmpty()
+  @IsString()
+  list_name: string;
 }

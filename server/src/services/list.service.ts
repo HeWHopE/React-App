@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { List } from '../entities/list.entity';
+import { taskList } from '../entities/ltaskList.entity';
 import { ActivityLogService } from './activity-log.service';
 import { ActivityLog } from '../entities/activity-log.entity';
 
@@ -41,7 +41,7 @@ export class ListService {
     }
   }
 
-  async createTaskList(createListDto: List) {
+  async createTaskList(createListDto: taskList) {
     try {
       const { name } = createListDto;
       const newList = await this.entityManager.query(
@@ -51,8 +51,8 @@ export class ListService {
 
       try {
         const activityLog = new ActivityLog();
-        activityLog.actionType = 'create';
-        activityLog.actionDescription = `You added new list:  ${name}`;
+        activityLog.action_type = 'create';
+        activityLog.action_description = `You added new list:  ${name}`;
         activityLog.timestamp = new Date();
 
         await this.activityLogService.logActivity(activityLog);
@@ -75,8 +75,8 @@ export class ListService {
 
       try {
         const activityLog = new ActivityLog();
-        activityLog.actionType = 'remove';
-        activityLog.actionDescription = `You removed list: ${deletedList[0][0].name}`;
+        activityLog.action_type = 'remove';
+        activityLog.action_description = `You removed list: ${deletedList[0][0].name}`;
         activityLog.timestamp = new Date();
         await this.activityLogService.logActivity(activityLog);
       } catch (error) {
@@ -93,7 +93,7 @@ export class ListService {
     }
   }
 
-  async updateTaskList(id: number, list: List) {
+  async updateTaskList(id: number, list: taskList) {
     try {
       const { name } = list;
 
@@ -106,8 +106,8 @@ export class ListService {
 
       try {
         const activityLog = new ActivityLog();
-        activityLog.actionType = 'update';
-        activityLog.actionDescription = `You updated name from: "${taskList.name}" to "${updatedList[0][0].name}"`;
+        activityLog.action_type = 'update';
+        activityLog.action_description = `You updated name from: "${taskList.name}" to "${updatedList[0][0].name}"`;
         activityLog.timestamp = new Date();
         await this.activityLogService.logActivity(activityLog);
       } catch (error) {

@@ -9,11 +9,8 @@ import { useFetchActivityQuery } from './services/ActivityService'
 
 function App() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
-  const { data: activities, refetch } = useFetchActivityQuery()
+  const { data: activities } = useFetchActivityQuery()
 
-  const handleRefresh = () => {
-    refetch()
-  }
 
   const handleOpenHistoryModal = () => {
     setIsHistoryModalOpen(true)
@@ -33,7 +30,6 @@ function App() {
             <HistoryButton
               onClick={() => {
                 handleOpenHistoryModal()
-                handleRefresh()
               }}
             />
           </div>

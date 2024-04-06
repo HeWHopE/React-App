@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Delete, Param, Put } from '@nestjs/common'
+import { Controller, Get, Post, Body, Delete, Param, Put, Query } from '@nestjs/common'
 import { ListService } from '../services/list.service'
-import { taskList } from '../entities/ltaskList.entity'
+import { TaskList } from '../entities/taskList.entity'
 
 @Controller()
 export class ListController {
@@ -17,8 +17,8 @@ export class ListController {
   }
 
   @Post('list')
-  async createTaskList(@Body() createListDto: taskList) {
-    return this.listService.createTaskList(createListDto)
+  async createTaskList(@Body() createListDto: TaskList, @Query('boardId') boardId: number) {
+    return this.listService.createTaskList(createListDto, boardId)
   }
 
   @Delete('list/:id')
@@ -27,7 +27,7 @@ export class ListController {
   }
 
   @Put('list/:id')
-  async updateTaskList(@Param('id') id: number, @Body() list: taskList) {
+  async updateTaskList(@Param('id') id: number, @Body() list: TaskList) {
     return this.listService.updateTaskList(id, list)
   }
 }

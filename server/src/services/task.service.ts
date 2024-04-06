@@ -25,9 +25,6 @@ export class TaskService {
       throw new Error('Failed to fetch tasks from the database')
     }
 
-   
-
-
   }
 
   async getTask(id: number, listId: number): Promise<Task | undefined> {
@@ -39,6 +36,7 @@ export class TaskService {
         'SELECT * FROM tasks WHERE id = $1 AND list_id = $2',
         [id, listId],
       )
+
       return task
     } catch (error) {
       throw new Error('Failed to fetch task from the database')
@@ -54,28 +52,31 @@ export class TaskService {
     try {
 
       const { name, description, due_date, priority } = createTaskDto
-      const errors = await validate(createTaskDto)
-      if (errors.length > 0) {
-        throw new BadRequestException('Validation failed')
-      }
 
       const listQueryResult = await this.entityManager.query(
-        'SELECT name FROM task_lists WHERE id = $1',
+        'SELECT * FROM task_lists WHERE id = $1',
         [listId],
       )
+
       const list_name = listQueryResult[0].name
 
       const [newTask] = await this.entityManager.query(
-        'INSERT INTO tasks (name, description, due_date, priority, list_id, list_name) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [name, description, due_date, priority, listId, list_name],
+        'INSERT INTO tasks (name, description, due_date, priority, list_id, list_name, board_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        [name, description, due_date, priority, listId, list_name, listQueryResult[0].boardId]
       )
 
-      const activityLog = new ActivityLog()
-      activityLog.action_type = 'create'
-      activityLog.action_description = `You added ${newTask.name} to the ${newTask.list_name}`
-      activityLog.timestamp = new Date()
-      activityLog.task_id = newTask.id
-      await this.activityLogService.logActivity(activityLog)
+        try{
+              const activityLog = new ActivityLog()
+              activityLog.action_type = 'create'
+              activityLog.action_description = `You added ${newTask.name} to the ${newTask.list_name}`
+              activityLog.timestamp = new Date()
+              activityLog.task_id = newTask.id
+              activityLog.board_id = listQueryResult[0].boardId
+              activityLog.list_id = listId
+              await this.activityLogService.logActivity(activityLog)
+        } catch (error) {
+          throw new Error('Failed to log activity')
+        }
 
       return newTask
     } catch (error) {
@@ -114,6 +115,7 @@ export class TaskService {
         activityLog.action_description = `You updated the due date of ${existingTask.name}`
         activityLog.timestamp = new Date()
         activityLog.task_id = id
+       activityLog.list_id = listId
         await this.activityLogService.logActivity(activityLog)
       }
   
@@ -165,32 +167,34 @@ export class TaskService {
       }
 
   }
-
   async deleteTask(id: number, listId: number): Promise<Task | undefined> {
-
     try {
-      
-    const chosenTask = await this.getTask(id, listId)
-    const [deletedTask] = await this.entityManager.query(
-      'DELETE FROM tasks WHERE id = $1 AND list_id = $2 RETURNING *',
-      [id, listId],
-    )
+      const chosenTask = await this.getTask(id, listId);
 
-    const activityLog = new ActivityLog()
+      await this.entityManager.query(
+        'DELETE FROM activity_log WHERE task_id = $1',
+        [id],
+      );
 
-    activityLog.action_type = 'delete'
-    activityLog.action_description = `You deleted  ${chosenTask.name} from the ${chosenTask.list_name}`
 
-    activityLog.timestamp = new Date()
-
-    this.activityLogService.logActivity(activityLog)
-
-    return deletedTask
+  
+      const [deletedTask] = await this.entityManager.query(
+        'DELETE FROM tasks WHERE id = $1 AND list_id = $2 RETURNING *',
+        [id, listId],
+      );
+    
+      const activityLog = new ActivityLog();
+      activityLog.action_type = 'delete';
+      activityLog.action_description = `You deleted ${chosenTask.name} from the ${chosenTask.list_name}`;
+      activityLog.timestamp = new Date();
+      this.activityLogService.logActivity(activityLog);
+  
+      return deletedTask;
     } catch (error) {
-      throw new Error('Failed to delete task from the database')
+      throw new Error('Failed to delete task from the database');
     }
-
   }
+  
 
   async moveTask(
     id: number,

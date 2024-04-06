@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
-import { taskList } from '../entities/ltaskList.entity';
+import { TaskList } from '../entities/taskList.entity';
 import { ActivityLogService } from './activity-log.service';
 import { ActivityLog } from '../entities/activity-log.entity';
 
@@ -13,13 +13,15 @@ export class ListService {
 
   async getTaskListById(id: number) {
     try {
-      const [taskList] = await this.entityManager.query(
+
+      const [TaskList] = await this.entityManager.query(
         'SELECT * FROM task_lists WHERE id = $1',
         [id],
       );
+      console.log(TaskList.board)
 
-      if (taskList) {
-        return taskList;
+      if (TaskList) {
+        return TaskList;
       } else {
         throw new NotFoundException(
           'Task list with the provided ID does not exist',
@@ -32,21 +34,22 @@ export class ListService {
 
   async getAllTaskLists() {
     try {
-      const taskLists = await this.entityManager.query(
+      const TaskLists = await this.entityManager.query(
         'SELECT * FROM task_lists ORDER BY id;',
       );
-      return taskLists;
+      return TaskLists;
     } catch (error) {
       throw new Error('Failed to fetch task lists from the database');
     }
   }
 
-  async createTaskList(createListDto: taskList) {
+  async createTaskList(createListDto: TaskList, boardId: number) {
     try {
       const { name } = createListDto;
+      
       const newList = await this.entityManager.query(
-        'INSERT INTO task_lists (name) VALUES ($1)',
-        [name],
+        'INSERT INTO task_lists (name, "boardId") VALUES ($1, $2) RETURNING *',
+        [name, boardId],
       );
 
       try {
@@ -54,7 +57,8 @@ export class ListService {
         activityLog.action_type = 'create';
         activityLog.action_description = `You added new list:  ${name}`;
         activityLog.timestamp = new Date();
-
+        activityLog.board_id = boardId;
+        activityLog.list_id = newList[0].id;
         await this.activityLogService.logActivity(activityLog);
       } catch (error) {
         throw new Error('Failed to log activity');
@@ -68,6 +72,22 @@ export class ListService {
 
   async deleteTaskList(id: number) {
     try {
+
+      //i wanna find list by id
+
+      const [list] = await this.entityManager.query(
+        'SELECT * FROM task_lists WHERE id = $1',
+        [id],
+      );
+
+
+      //i wanna delte all tasks where id == $id
+
+      await this.entityManager.query(
+        'DELETE FROM tasks WHERE list_id = $1',
+        [id],
+      );
+
       const deletedList = await this.entityManager.query(
         'DELETE FROM task_lists WHERE id = $1 RETURNING *',
         [id],
@@ -93,11 +113,13 @@ export class ListService {
     }
   }
 
-  async updateTaskList(id: number, list: taskList) {
+
+
+  async updateTaskList(id: number, list: TaskList) {
     try {
       const { name } = list;
 
-      const taskList = await this.getTaskListById(id);
+      const TaskList = await this.getTaskListById(id);
 
       const updatedList = await this.entityManager.query(
         'UPDATE task_lists SET name = $1 WHERE id = $2 RETURNING *',
@@ -107,7 +129,7 @@ export class ListService {
       try {
         const activityLog = new ActivityLog();
         activityLog.action_type = 'update';
-        activityLog.action_description = `You updated name from: "${taskList.name}" to "${updatedList[0][0].name}"`;
+        activityLog.action_description = `You updated name from: "${TaskList.name}" to "${updatedList[0][0].name}"`;
         activityLog.timestamp = new Date();
         await this.activityLogService.logActivity(activityLog);
       } catch (error) {

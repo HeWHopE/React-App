@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Task } from './task.entity'; // Import Task entity
+import { Board } from './Board.entity'; // Import Board entity
 
 @Entity({ name: 'task_lists' }) // Set entity name to 'task_lists'
-export class taskList {
+export class TaskList {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,4 +12,6 @@ export class taskList {
   @IsString()
   name: string;
 
+  @ManyToOne(() => Board, board => board.lists) 
+  board: Board;
 }

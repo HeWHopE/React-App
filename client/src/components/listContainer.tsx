@@ -48,7 +48,7 @@ const ListContainer = () => {
                   update={handleUpdate}
                   list={list}
                 />
-                <CircleItem listId={Number(list.id)} />
+                <CircleItem listId={Number(list.id )} list ={list}/>
                 <TaskList listId={Number(list.id)} />
               </div>
             ))}

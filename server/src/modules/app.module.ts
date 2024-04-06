@@ -1,16 +1,16 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ListModule } from './list.module';
-import { TaskModule } from './task.module';
-import { ActivityLogModule } from './activity-log.module';
-import * as dotenv from 'dotenv';
-import { Task } from '../entities/task.entity';
-import { ActivityLog } from '../entities/activity-log.entity';
-import { Board } from 'src/entities/Board.entity';
-import { TaskList } from 'src/entities/taskList.entity';
-import { BoardModule } from './board-module';
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ListModule } from './list.module'
+import { TaskModule } from './task.module'
+import { ActivityLogModule } from './activity-log.module'
+import * as dotenv from 'dotenv'
+import { Task } from '../entities/task.entity'
+import { ActivityLog } from '../entities/activity-log.entity'
+import { Board } from 'src/entities/Board.entity'
+import { TaskList } from 'src/entities/taskList.entity'
+import { BoardModule } from './board-module'
 
-dotenv.config();
+dotenv.config()
 
 @Module({
   imports: [
@@ -23,7 +23,6 @@ dotenv.config();
       database: process.env.DATABASE_NAME,
       entities: [TaskList, Task, ActivityLog, Board],
       synchronize: true,
-     
     }),
     BoardModule,
     ListModule,
@@ -31,7 +30,4 @@ dotenv.config();
     ActivityLogModule,
   ],
 })
-
 export class AppModule {}
-
-

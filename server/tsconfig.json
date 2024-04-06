@@ -19,6 +19,6 @@
     "noFallthroughCasesInSwitch": false,
     "types": ["typeorm"],
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   }
 }

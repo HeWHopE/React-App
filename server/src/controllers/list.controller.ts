@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Delete, Param, Put, Query } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Delete,
+  Param,
+  Put,
+  Query,
+} from '@nestjs/common'
 import { ListService } from '../services/list.service'
 import { TaskList } from '../entities/taskList.entity'
 
@@ -16,8 +25,19 @@ export class ListController {
     return this.listService.getTaskListById(id)
   }
 
+
+  @Get('list/board/:boardId')
+  async getTaskListByBoardId(@Param('boardId') boardId: number) {
+    return this.listService.getTaskListByBoardId(boardId)
+  }
+
+
+
   @Post('list')
-  async createTaskList(@Body() createListDto: TaskList, @Query('boardId') boardId: number) {
+  async createTaskList(
+    @Body() createListDto: TaskList,
+    @Query('boardId') boardId: number,
+  ) {
     return this.listService.createTaskList(createListDto, boardId)
   }
 

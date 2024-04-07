@@ -128,6 +128,7 @@ export class TaskService {
           activityLog.action_description = action_description
           activityLog.timestamp = new Date()
           activityLog.task_id = id
+          activityLog.list_id = listId
           await this.activityLogService.logActivity(activityLog)
         }
       }
@@ -228,6 +229,7 @@ export class TaskService {
       activityLog.action_type = 'move'
       activityLog.action_description = `You moved ${task.name} from ${task.list_name} to ${taskNewList.name}`
       activityLog.timestamp = new Date()
+      activityLog.board_id = taskList.boardId
       await this.activityLogService.logActivity(activityLog)
       return movedTask
     } catch (error) {

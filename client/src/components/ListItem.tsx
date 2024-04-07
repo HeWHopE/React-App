@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { IList } from '../models/IList'
-import '../styles/listItem.css'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { FiEdit } from 'react-icons/fi'
 import { FiPlus } from 'react-icons/fi'
 import { BsFillTrash3Fill } from 'react-icons/bs'
 import TaskModal from './taskModal'
 import { taskApi } from '../services/TaskService'
+import { useUpdateListMutation } from '../services/ListService'
+
+import '../styles/listItem.css'
+
 interface ListItemProps {
   list: IList
   remove: (list: IList) => void
-  update: (list: IList) => void
 }
 
-const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
+const ListItem: React.FC<ListItemProps> = ({ list, remove }) => {
   const [showPopup, setShowPopup] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [taskName, setTaskName] = useState('')
@@ -21,8 +23,19 @@ const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
   const [taskDueDate, setTaskDueDate] = useState('')
   const [taskPriority, setTaskPriority] = useState('')
   const [error, setError] = useState('')
-
+  const [listName, setListName] = useState(list.name)
   const [postTaskMutation] = taskApi.usePostTaskMutation()
+  const [editMode, setEditMode] = useState(false)
+  const [updateList, {}] = useUpdateListMutation()
+
+  const handleUpdate = async (listName: string) => {
+    try {
+      await updateList({ name: listName, list_id: Number(list.id) })
+    } catch (error) {
+      console.error('Error updating list:', error)
+      // Handle error if necessary
+    }
+  }
 
   const togglePopup = () => {
     setShowPopup(!showPopup)
@@ -36,19 +49,6 @@ const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
       remove(list)
     } else {
       console.error('ID is undefined')
-    }
-  }
-
-  const handleUpdate = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation()
-    const name = prompt('Edit name:', list.name) || list.name;
-
-    if (list.id !== undefined) {
-      update({ ...list, name: name })
-      togglePopup()
-    } else {
-      console.error('ID is undefined')
-      togglePopup()
     }
   }
 
@@ -89,48 +89,57 @@ const ListItem: React.FC<ListItemProps> = ({ list, remove, update }) => {
   }
 
   return (
-    <div className="list-item">
-      <span className="list-item-name">{list.name}</span>
-      <div className="list-item-dots" onClick={togglePopup}>
+    <div className="pl-4 flex justify-between items-center w-52 ">
+    {editMode ? (
+  <textarea
+    
+    className={`resize-none w-full p-1 border-white border-none`}
+    value={listName}
+    onChange={(e) => setListName(e.target.value)}
+    onBlur={() => {
+      setEditMode(false);
+      if (listName.length < 1) {
+        setListName("Untitled");
+        return;
+      }
+      handleUpdate(listName);
+    }}
+    autoFocus
+    rows={1}
+    maxLength={13}
+    minLength={1}
+  />
+) : (
+  <textarea
+    
+    className="cursor-pointer resize-none overflow-hidden whitespace-pre-wrap w-full p-1 bg-slate-200"
+    onClick={() => setEditMode(true)}
+    value={listName}
+    rows={1}
+    readOnly
+    style={{ userSelect: 'none' }}
+  />
+)}
+
+
+      <div
+        className="cursor-pointer p-4 hover:bg-slate-400 duration-200 p-4"
+        onClick={togglePopup}
+      >
         <BsThreeDotsVertical />
       </div>
+
       {showPopup && (
-        <div className="popup">
-          <div className="Edit" onClick={handleUpdate}>
-            <FiEdit />
-            Edit
-          </div>
-          <div className="Add-new-card" onClick={() => setIsModalOpen(true)}>
-            {' '}
-            <FiPlus /> Add new card
-          </div>
+        <div className="popup" style={{ userSelect: 'none' }}>
           <div className="Delete" onClick={handleRemove}>
-            {' '}
             <BsFillTrash3Fill />
             Delete
           </div>
         </div>
-      )}
-
-      {isModalOpen && (
-        <TaskModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false)
-            togglePopup()
-          }}
-          error={error}
-          onTaskNameChange={setTaskName}
-          onTaskDescriptionChange={setTaskDescription}
-          onTaskDueDateChange={setTaskDueDate}
-          onTaskPriorityChange={setTaskPriority}
-          onCreateTask={handleCreate}
-          text="Edit Task"
-          viewStyle={false}
-        />
       )}
     </div>
   )
 }
 
 export default ListItem
+

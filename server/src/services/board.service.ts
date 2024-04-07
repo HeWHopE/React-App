@@ -64,11 +64,17 @@ export class BoardService {
 
   async deleteBoard(id: number): Promise<void> {
     try {
-
-
-      await this.entityManager.query('DELETE FROM activity_log WHERE board_id = $1', [id])
-      await this.entityManager.query('DELETE FROM tasks WHERE board_id = $1', [id])
-      await this.entityManager.query('DELETE FROM task_lists WHERE "boardId" = $1', [id])
+      await this.entityManager.query(
+        'DELETE FROM activity_log WHERE board_id = $1',
+        [id],
+      )
+      await this.entityManager.query('DELETE FROM tasks WHERE board_id = $1', [
+        id,
+      ])
+      await this.entityManager.query(
+        'DELETE FROM task_lists WHERE "boardId" = $1',
+        [id],
+      )
 
       await this.entityManager.query('DELETE FROM boards WHERE id = $1', [id])
     } catch (error) {

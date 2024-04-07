@@ -5,6 +5,8 @@ import { BsCalendar2 } from 'react-icons/bs'
 import { MdPriorityHigh } from 'react-icons/md'
 import { useFetchActivityQuery } from '../services/ActivityService'
 
+import { useParams } from 'react-router-dom'
+
 interface TaskModalProps {
   task?: ITask
   isOpen: boolean
@@ -37,8 +39,14 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const [taskDueDate, setTaskDueDate] = useState('')
   const [taskPriority, setTaskPriority] = useState('')
 
-  const { data: activities, refetch } = useFetchActivityQuery()
+  const { yourArg } = useParams<{ yourArg?: string }>()
+  const boardId = yourArg ? parseInt(yourArg, 10) : undefined
 
+  if (boardId === undefined) {
+    throw new Error('boardId is undefined')
+  }
+
+  const { data: activities, refetch } = useFetchActivityQuery({ boardId })
   useEffect(() => {
     refetch()
 

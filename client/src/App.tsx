@@ -1,50 +1,19 @@
-import React, { useState } from 'react'
-import './styles/App.css'
+import React from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import './styles.css'
+import Lists from './pages/lists'
+import Boards from './pages/boards'
+import MyNavbar from './components/myNavbar'
 
-import HistoryButton from './components/historyButton'
-import ListContainer from './components/listContainer'
-import CreateListButton from './components/createListButton'
-import HistoryModal from './components/historyModal'
-import { useFetchActivityQuery } from './services/ActivityService'
-
-function App() {
-  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
-  const { data: activities } = useFetchActivityQuery()
-
-
-  const handleOpenHistoryModal = () => {
-    setIsHistoryModalOpen(true)
-  }
-
-  const handleCloseHistoryModal = () => {
-    setIsHistoryModalOpen(false)
-  }
-
+const App = () => {
   return (
-    <div className="App">
-      <nav className="navbar">
-        <div className="navbar-container">
-          <div className="navbar-title">My Task Board</div>
-          <div className="navbar-buttons">
-            <CreateListButton />
-            <HistoryButton
-              onClick={() => {
-                handleOpenHistoryModal()
-              }}
-            />
-          </div>
-        </div>
-      </nav>
-      <HistoryModal
-        isOpen={isHistoryModalOpen}
-        onClose={handleCloseHistoryModal}
-        activities={activities}
-      />
-      {isHistoryModalOpen && (
-        <div className="overlay" onClick={handleCloseHistoryModal}></div>
-      )}
-      <ListContainer />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/lists/:yourArg" element={<Lists />} />
+
+        <Route path="/" element={<Boards />} />
+      </Routes>
+    </Router>
   )
 }
 

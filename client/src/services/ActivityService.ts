@@ -6,9 +6,12 @@ export const activityApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
   tagTypes: ['activity'],
   endpoints: (build) => ({
-    fetchActivity: build.query<ActivityLog[], void>({
-      query: () => ({
-        url: '/activity',
+    fetchActivity: build.query<ActivityLog[], { boardId: number }>({
+      query: ({ boardId }) => ({
+        url: `/activity/${boardId}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }),
       providesTags: (result) => ['activity'],
     }),

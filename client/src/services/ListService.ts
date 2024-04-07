@@ -6,26 +6,29 @@ export const listApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
   tagTypes: ['List'],
   endpoints: (build) => ({
-    fetchLists: build.query<IList[], void>({
-      query: () => ({
-        url: '/list',
+    fetchLists: build.query<IList[], { boardId: number }>({
+      query: ({ boardId }) => ({
+        url: `/list/board/${boardId}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }),
       providesTags: (result) => ['List'],
     }),
-    postList: build.mutation<IList, IList>({
-      query: (list) => ({
-        url: '/list',
+    postList: build.mutation<IList, { name: string; boardId: number }>({
+      query: ({ name, boardId }) => ({
+        url: `/list/?boardId=${boardId}`, // Include boardId in the URL
         method: 'POST',
-        body: list,
+        body: { name }, // Send only the name in the request body
       }),
       invalidatesTags: ['List'],
     }),
 
-    updateList: build.mutation<IList, IList>({
-      query: (list) => ({
-        url: `/list/${list.id}`,
+    updateList: build.mutation<IList, { name: string; list_id: number }>({
+      query: ({ list_id, name }) => ({
+        url: `/list/${list_id}`,
         method: 'PUT',
-        body: list,
+        body: { name }, // You need to pass the name within an object
       }),
       invalidatesTags: ['List'],
     }),

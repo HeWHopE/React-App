@@ -2,12 +2,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import { listApi } from '../services/ListService'
 import { taskApi } from '../services/TaskService'
-
+import { boardApi } from '../services/BoardService'
 import { activityApi } from '../services/ActivityService'
 const rootReducers = combineReducers({
   [listApi.reducerPath]: listApi.reducer,
   [taskApi.reducerPath]: taskApi.reducer,
   [activityApi.reducerPath]: activityApi.reducer,
+  [boardApi.reducerPath]: boardApi.reducer,
 })
 
 export const setupStore = () => {
@@ -18,6 +19,7 @@ export const setupStore = () => {
         listApi.middleware,
         taskApi.middleware,
         activityApi.middleware,
+        boardApi.middleware,
       ),
   })
 }

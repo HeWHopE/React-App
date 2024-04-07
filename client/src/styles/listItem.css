@@ -1,17 +1,5 @@
-.list-item {
-  position: relative; 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 200px;
-  text-align: left;
-  border-top: #ccc solid 1px;
-  border-bottom: #ccc solid 1px;
-  padding: 10px;
-}
-
 .list-item-dots {
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .popup {
@@ -23,42 +11,42 @@
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 8px;
-  z-index: 100; 
+  z-index: 100;
 }
 
 .list-item:hover .popup {
-  display: block; 
+  display: block;
 }
 
 .popup > div {
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
 }
 
 .popup > div:last-child {
-  margin-bottom: 0; 
+  margin-bottom: 0;
 }
 
 .Edit,
 .Add-new-card,
 .Delete {
-  display: flex; 
-  align-items: center; 
-  cursor: pointer; 
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .Delete {
-  color: red; 
+  color: red;
 }
 
 .Add-new-card {
   padding-top: 10px;
-  padding-bottom: 10px; 
+  padding-bottom: 10px;
 }
 
 .Edit > svg,
 .Add-new-card > svg,
 .Delete > svg {
-  margin-right: 5px; 
+  margin-right: 5px;
 }
 
 .dot-circle {
@@ -69,10 +57,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .dot-circle-text {
-  font-size: 12px; 
+  font-size: 12px;
 }
-

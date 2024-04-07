@@ -18,10 +18,9 @@
 .history-modal-content {
   padding: 20px;
 
-  max-height: calc(100% - 60px); 
+  max-height: calc(100% - 60px);
   overflow-y: auto;
 }
-
 
 .history-navbar {
   display: flex;
@@ -67,4 +66,3 @@
 .history-item-list li div:last-child {
   font-style: italic;
 }
-

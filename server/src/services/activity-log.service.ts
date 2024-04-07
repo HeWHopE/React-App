@@ -36,16 +36,16 @@ export class ActivityLogService {
           task.board_id,
           list_id,
         ])
+      } else {
+        await this.entityManager.query(query, [
+          action_type,
+          action_description,
+          timestamp,
+          task_id,
+          board_id,
+          list_id ? list_id : null,
+        ])
       }
-
-      await this.entityManager.query(query, [
-        action_type,
-        action_description,
-        timestamp,
-        task_id,
-        board_id,
-        list_id ? list_id : null,
-      ])
     } catch (error) {
       console.error('Error logging activity:', error)
       throw new Error('Failed to log activity')
@@ -68,7 +68,7 @@ export class ActivityLogService {
 
   async getActivityLogsByBoardId(boardId: number) {
     try {
-      console.log(boardId)
+      console.log(boardId, '123')
 
       return await this.entityManager.query(
         'SELECT * FROM activity_log WHERE board_id = $1 ORDER BY timestamp DESC',

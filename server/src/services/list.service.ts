@@ -3,6 +3,7 @@ import { EntityManager } from 'typeorm'
 import { TaskList } from '../entities/taskList.entity'
 import { ActivityLogService } from './activity-log.service'
 import { ActivityLog } from '../entities/activity-log.entity'
+import { Task } from '../entities/task.entity'
 
 @Injectable()
 export class ListService {
@@ -17,7 +18,6 @@ export class ListService {
         'SELECT * FROM task_lists WHERE id = $1',
         [id],
       )
-      console.log(TaskList.board)
 
       if (TaskList) {
         return TaskList
@@ -41,21 +41,19 @@ export class ListService {
       throw new Error('Failed to fetch task lists from the database')
     }
   }
-  
+
   async getTaskListByBoardId(boardId: number) {
     try {
       const TaskLists = await this.entityManager.query(
-        'SELECT * FROM task_lists WHERE "boardId" = $1 ORDER BY id',
-        [boardId],
+        'SELECT * FROM task_lists WHERE "boardId" = $1',
+        [Number(boardId)],
       )
+
       return TaskLists
     } catch (error) {
       throw new Error('Failed to fetch task lists from the database')
     }
   }
-
-
-
 
   async createTaskList(createListDto: TaskList, boardId: number) {
     try {
@@ -86,14 +84,15 @@ export class ListService {
 
   async deleteTaskList(id: number) {
     try {
-      //i wanna find list by id
-
       const [list] = await this.entityManager.query(
         'SELECT * FROM task_lists WHERE id = $1',
         [id],
       )
 
-      //i wanna delte all tasks where id == $id
+      await this.entityManager.query(
+        'DELETE FROM activity_log WHERE list_id = $1',
+        [id],
+      )
 
       await this.entityManager.query('DELETE FROM tasks WHERE list_id = $1', [
         id,
@@ -109,6 +108,7 @@ export class ListService {
         activityLog.action_type = 'remove'
         activityLog.action_description = `You removed list: ${deletedList[0][0].name}`
         activityLog.timestamp = new Date()
+        activityLog.board_id = deletedList[0][0].boardId
         await this.activityLogService.logActivity(activityLog)
       } catch (error) {
         throw new Error('Failed to log activity')
@@ -124,10 +124,8 @@ export class ListService {
     }
   }
 
-  async updateTaskList(id: number, list: TaskList) {
+  async updateTaskList(id: number, name: string) {
     try {
-      const { name } = list
-
       const TaskList = await this.getTaskListById(id)
 
       const updatedList = await this.entityManager.query(

@@ -6,11 +6,11 @@ import TaskModal from './taskModal'
 import { IList } from '../models/IList'
 
 interface CircleItemProps {
-  listId: number,
+  listId: number
   list: IList
 }
 
-const CircleItem: React.FC<CircleItemProps> = ( {listId, list} ) => {
+const CircleItem: React.FC<CircleItemProps> = ({ listId, list }) => {
   const [postTaskMutation] = taskApi.usePostTaskMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [taskName, setTaskName] = useState('')

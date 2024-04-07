@@ -25,13 +25,10 @@ export class ListController {
     return this.listService.getTaskListById(id)
   }
 
-
   @Get('list/board/:boardId')
   async getTaskListByBoardId(@Param('boardId') boardId: number) {
     return this.listService.getTaskListByBoardId(boardId)
   }
-
-
 
   @Post('list')
   async createTaskList(
@@ -45,9 +42,12 @@ export class ListController {
   async deleteTaskList(@Param('id') id: number) {
     return this.listService.deleteTaskList(id)
   }
-
   @Put('list/:id')
-  async updateTaskList(@Param('id') id: number, @Body() list: TaskList) {
-    return this.listService.updateTaskList(id, list)
+  async updateTaskList(
+    @Param('id') id: number,
+    @Body() body: { name: string },
+  ) {
+    const { name } = body // Destructure 'name' from the request body
+    return this.listService.updateTaskList(id, name)
   }
 }

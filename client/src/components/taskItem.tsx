@@ -8,7 +8,7 @@ import { BsFillTrash3Fill } from 'react-icons/bs'
 import TaskModal from './taskModal'
 import { IList } from '../models/IList'
 import { useFetchListsQuery } from '../services/ListService'
-
+import { useParams } from 'react-router-dom'
 interface TaskItemProps {
   task: ITask
   remove: (task: ITask) => void
@@ -25,11 +25,19 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
   const [taskPriority, setTaskPriority] = useState(task.priority)
   const [error, setError] = useState('')
   const [viewModalOpen, setViewModalOpen] = useState(false) // State for ViewModal
+
+  const { yourArg } = useParams<{ yourArg?: string }>()
+  const boardId = yourArg ? parseInt(yourArg, 10) : undefined
+
+  if (boardId === undefined) {
+    throw new Error('boardId is undefined')
+  }
+
   const {
     data: lists,
     error: listError,
     isLoading: listIsLoading,
-  } = useFetchListsQuery()
+  } = useFetchListsQuery({ boardId })
 
   const [isModalOpen1, setIsModalOpen1] = useState(false) // State for ViewModal
 
@@ -127,7 +135,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
 
   return (
     <div
-      className="task-item"
+      className="task-item w-40 p-4 m-4"
       onClick={() => {
         handleEditClick1()
       }}
@@ -144,103 +152,6 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, remove, update, move }) => {
           <BsThreeDotsVertical />
         </div>
       </div>
-      <div className="task-details">
-        <div className="task-description">
-          {task.description.split('\n').map((line, index) => (
-            <div key={index}>{line}</div>
-          ))}
-        </div>
-        <div className="task-due-date">
-          <span className="due-date-icon">
-            <BiCalendarCheck />
-          </span>
-          {formatDate(task.due_date.toLocaleString())}
-        </div>
-        <div className="task-priority">
-          <span className="priority-badge">
-            <span className="dot"></span>
-            <span className="priority-text">{task.priority}</span>
-          </span>
-        </div>
-        <div>
-          <select
-            className="select"
-            value={task.list_id}
-            onChange={handleSelectChange}
-            onClick={handleSelectClick}
-          >
-            <option value="1">Move to</option>
-            {lists &&
-              lists
-                .filter((list: IList) => list.id !== task.list_id) // Exclude the task's own list
-                .map((list: IList) => (
-                  <option key={list.id} value={list.id}>
-                    {list.name}
-                  </option>
-                ))}
-          </select>
-        </div>
-      </div>
-      {showPopup && (
-        <div
-          className="popup"
-          onClick={(event) => {
-            event.stopPropagation()
-          }}
-        >
-          <div
-            className="Edit"
-            onClick={(event) => {
-              event.stopPropagation()
-              handleEditClick()
-            }}
-          >
-            <FiEdit />
-            Edit
-          </div>
-          <div className="Delete" onClick={handleRemove}>
-            <BsFillTrash3Fill />
-            Delete
-          </div>
-        </div>
-      )}
-      {isModalOpen1 && (
-        <TaskModal
-          task={task}
-          isOpen={isModalOpen1}
-          onClose={() => {
-            setIsModalOpen1(false)
-            togglePopup()
-          }}
-          error={error}
-          onTaskNameChange={setTaskName}
-          onTaskDescriptionChange={setTaskDescription}
-          onTaskDueDateChange={setTaskDueDate}
-          onTaskPriorityChange={setTaskPriority}
-          onCreateTask={handleUpdate}
-          text="View Task"
-          viewStyle={true}
-        />
-      )}
-
-      {isModalOpen && (
-        <TaskModal
-          task={task}
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false)
-            togglePopup()
-          }}
-          error={error}
-          onTaskNameChange={setTaskName}
-          onTaskDescriptionChange={setTaskDescription}
-          onTaskDueDateChange={setTaskDueDate}
-          onTaskPriorityChange={setTaskPriority}
-          onCreateTask={handleUpdate}
-          text="Edit Task"
-          viewStyle={false}
-        />
-      )}
     </div>
   )
 }

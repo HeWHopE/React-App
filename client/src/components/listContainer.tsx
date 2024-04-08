@@ -2,18 +2,33 @@ import {
   useFetchListsQuery,
   useDeleteListMutation,
 } from '../services/ListService'
-import React, { createRef, useState, MouseEvent } from 'react'
-import CircleItem from './CircleItem'
+import React, { createRef, useState, MouseEvent, useRef } from 'react'
 import ListItem from './ListItem'
 import TaskList from './taskList'
 import { IList } from '../models/IList'
 import { useParams } from 'react-router-dom'
 import MyNavbar from './myNavbar'
 import { BsPlus } from 'react-icons/bs'
+import TextAreaComponent from './TextAreaComponent'
+import { AiOutlineCloseCircle } from 'react-icons/ai'
 
-import { AiOutlineCloseCircle } from "react-icons/ai";
 
-const ListContainer = () => {
+import { usePostListMutation } from '../services/ListService'
+
+import { useEffect } from 'react'
+import HeaderOfLists from './HeaderOfLists'
+
+//write interface
+
+interface ListContainerProps {
+  isHistoryModalOpen: boolean
+  isBoardsModalOpen: boolean
+}
+
+const ListContainer: React.FC<ListContainerProps> = ({
+  isHistoryModalOpen,
+  isBoardsModalOpen,
+}) => {
   const { yourArg } = useParams<{ yourArg?: string }>()
   const boardId = yourArg ? parseInt(yourArg, 10) : undefined
 
@@ -21,11 +36,7 @@ const ListContainer = () => {
     throw new Error('boardId is undefined')
   }
 
-  const {
-    data: lists,
-    error: listError,
-    isLoading: listIsLoading,
-  } = useFetchListsQuery({ boardId })
+  const { data: lists } = useFetchListsQuery({ boardId })
   const [deleteList] = useDeleteListMutation()
   const olRef = createRef<HTMLOListElement>()
   const [isDragging, setIsDragging] = useState(false)
@@ -35,28 +46,24 @@ const ListContainer = () => {
     {},
   )
 
-  const [text, setText] = useState('');
-  const [textareaHeight, setTextareaHeight] = useState('auto');
-  const [textAreas, setTextAreas] = useState<{ [key: number]: { text: string; height: string } }>({});
+  const [isAddingList, setIsAddingList] = useState(false);
+  const [newListName, setNewListName] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, listId: number) => {
-    const newTextAreas = { ...textAreas };
-    newTextAreas[listId] = { text: e.target.value, height: `${e.target.scrollHeight}px` };
-    setTextAreas(newTextAreas);
-  };
-  
-  const handleBlur = (listId: number) => {
-    setShowTextarea((prevState) => ({
-      ...prevState,
-      [listId]: false,
-    }));
-    setTextAreas((prevTextAreas) => ({
-      ...prevTextAreas,
-      [listId]: { text: '', height: 'auto' }, // Reset text and height for the corresponding list
-    }));
-  };
-  
 
+  const [postList] = usePostListMutation()
+
+  useEffect(() => {
+    const handleScroll = (event: Event) => {
+      if (isHistoryModalOpen && olRef.current) {
+        olRef.current.scrollLeft = 0
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const handleMouseMove = (e: MouseEvent<HTMLOListElement>) => {
     if (!isDragging || !olRef.current || startX === null) return
@@ -81,6 +88,22 @@ const ListContainer = () => {
     deleteList(list)
   }
 
+  
+const handleAddList = () => {
+
+  if (!newListName) {
+    setNewListName('');
+    setIsAddingList(false);
+    return;
+  }
+
+  postList({ name: newListName, boardId })
+
+  setNewListName('');
+  setIsAddingList(false);
+};
+
+
   if (!lists) {
     return <div>Create your 1st list dear!!!</div>
   }
@@ -90,66 +113,78 @@ const ListContainer = () => {
     const idB = Number(b.id) || 0
     return idA - idB
   })
-
   return (
-    <ol
-      className="select-none h-screen flex-grow flex flex-row overflow-y-scroll"
-      ref={olRef}
-      onMouseMove={handleMouseMove}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-    >
-      {sortedLists.map((list: IList) => (
-        <li key={list.id} className="m-4">
-          <div className="rounded-lg bg-slate-200">
-            <ListItem remove={handleRemove} list={list} />
-            <TaskList listId={Number(list.id)} />
+    <>
+      <HeaderOfLists
+        isHistoryModalOpen={isHistoryModalOpen}
+        isBoardsModalOpen={isBoardsModalOpen}
+      />
 
-            <div className=" flex justify-center">
-              {showTextarea[Number(list.id)] ? (
-                <div className="flex flex-col items-center justify-center">
-                  <textarea
-  placeholder="Enter a title for this card..."
-  value={textAreas[Number(list.id)]?.text || ''}
-  onChange={(e) => handleChange(e, Number(list.id))}
-  onBlur={() => handleBlur(Number(list.id))}
-  style={{ minHeight: '12px', height: textAreas[Number(list.id)]?.height || 'auto' }}
-  className="flex-grow bg-white rounded-lg shadow border-none p-2 resize-none mb-2 w-full"
-/>
+<ol
+  className={`select-none ${isHistoryModalOpen ? 'mr-72' : 'mr-4'} ${isBoardsModalOpen ? 'ml-72' : 'ml-4'} min-h-[790px] duration-300 flex-grow flex flex-row overflow-y-hidden z-2`}
+  ref={olRef}
+  onMouseMove={handleMouseMove}
+  onMouseDown={handleMouseDown}
+  onMouseUp={handleMouseUp}
+>
 
-                  <div className="flex items-center w-full m-2">
-  <button className="flex-shrink-0 bg-blue-500 text-white px-4 h-8 rounded hover:bg-blue-600 mr-2">
-    Add card
+
+  {sortedLists.map((list: IList) => (
+    <li key={list.id} className="m-4 max-h-[900px]">
+      <div className="rounded-3xl bg-slate-200 w-80">
+        <ListItem remove={handleRemove} list={list} />
+
+        <ol className="max-h-[700px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <TaskList listId={Number(list.id)} />
+          <TextAreaComponent
+            list={list}
+            showTextarea={showTextarea}
+            setShowTextarea={setShowTextarea}
+          />
+        </ol>
+      </div>
+    </li>
+  ))}
+
+<li className="m-4">
+    {isAddingList ? (
+      <div>
+        <textarea
+              className="flex-grow bg-white rounded-lg shadow border-none p-2 resize-none mb-2 w-80" // Adjusted class
+          placeholder="Enter list name"
+          value={newListName}
+          onChange={(e) => setNewListName(e.target.value)}
+        />
+        <div className="flex justify-between items-center mt-2">
+  <button
+    className="flex-shrink-0 bg-blue-500 text-white px-4 h-8 rounded hover:bg-blue-600 mr-2 w-3/4" // Adjusted button width
+    onClick={handleAddList}
+  >
+    Add list
   </button>
-  <button className="flex-shrink-0 text-white color-black text-black rounded hover:bg-slate-300 p-1">
-    <AiOutlineCloseCircle className='w-8 h-8 text-gray-500' />
+  <button
+    className="flex-shrink-0 color-black text-black rounded-full duration-300 hover:bg-slate-300 p-1"
+    onClick={() => setIsAddingList(false)}
+  >
+    <AiOutlineCloseCircle className="w-8 h-8 text-gray-500" />
   </button>
 </div>
-                </div>
-              ) : (
-                <button
-                  className="flex items-center justify-center hover:bg-slate-300 duration-500 m-1 rounded-lg w-40 py-2"
-                  onClick={() =>
-                    setShowTextarea((prevState) => ({
-                      ...Object.fromEntries(
-                        Object.entries(prevState).map(([key, value]) => [
-                          key,
-                          false,
-                        ]),
-                      ),
-                      [Number(list.id)]: true,
-                    }))
-                  }
-                >
-                  <BsPlus />
-                  <span className="text-md">Add Card</span>
-                </button>
-              )}
-            </div>
-          </div>
-        </li>
-      ))}
-    </ol>
+
+      </div>
+    ) : (
+      <button
+        className="flex items-center justify-center hover:bg-slate-300 duration-300 m-1 rounded-lg bg-slate-100 w-80 py-2"
+        onClick={() => setIsAddingList(true)}
+      >
+        <BsPlus className="text-slate-600 h-6 w-6" />
+        <span className="text-md text-slate-600">Add List</span>
+      </button>
+    )}
+  </li>
+  
+</ol>
+
+    </>
   )
 }
 

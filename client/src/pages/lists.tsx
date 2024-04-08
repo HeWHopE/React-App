@@ -1,47 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../styles/App.css'
 import '../styles.css'
-import HistoryButton from '../components/historyButton'
 import ListContainer from '../components/listContainer'
 import CreateListButton from '../components/createListButton'
 import HistoryModal from '../components/historyModal'
 import { useFetchActivityQuery } from '../services/ActivityService'
 import { useParams } from 'react-router-dom'
+import MyNavbar from '../components/myNavbar'
+import { BsArrowLeftShort } from 'react-icons/bs'
 
-const Lists: React.FC = () => {
+//write interface
+
+interface ListsProps {
+  isBoardsModalOpen: boolean
+}
+
+const Lists: React.FC<ListsProps> = ({ isBoardsModalOpen }) => {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
 
   const { yourArg } = useParams<{ yourArg?: string }>()
   const boardId = yourArg ? parseInt(yourArg, 10) : undefined
 
-  console.log(typeof boardId, 'boardId')
-
   if (boardId === undefined || isNaN(boardId)) {
     throw new Error('Invalid boardId')
   }
+  console.log(isBoardsModalOpen)
 
   const { data: activities, refetch } = useFetchActivityQuery({ boardId })
 
-  const handleOpenHistoryModal = () => {
+  useEffect(() => {
     refetch()
-    setIsHistoryModalOpen(true)
-  }
+  }, [isHistoryModalOpen])
 
   const handleCloseHistoryModal = () => {
     setIsHistoryModalOpen(false)
   }
 
   return (
-    <div className="App">
+    <div>
+      <ListContainer
+        isHistoryModalOpen={isHistoryModalOpen}
+        isBoardsModalOpen={isBoardsModalOpen}
+      />
       <HistoryModal
-        isOpen={isHistoryModalOpen}
         onClose={handleCloseHistoryModal}
         activities={activities}
+        onOpenChange={setIsHistoryModalOpen} // Passing callback to handle modal open/close state
       />
-      {isHistoryModalOpen && (
-        <div className="overlay" onClick={handleCloseHistoryModal}></div>
-      )}
-      <ListContainer />
     </div>
   )
 }

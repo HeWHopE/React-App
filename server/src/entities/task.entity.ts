@@ -5,7 +5,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm'
-import { IsNotEmpty, IsString, IsDateString } from 'class-validator'
+import { IsNotEmpty, IsString, IsDateString, IsOptional } from 'class-validator'
 import { TaskList } from './taskList.entity'
 import { Board } from './Board.entity' // Import the Board entity
 
@@ -20,19 +20,19 @@ export class Task {
   name: string
 
   @Column({ type: 'text', nullable: true })
-  @IsNotEmpty()
-  @IsString()
-  description: string
+  @IsOptional() // Make the property optional
+  @IsString() // Add a custom message for validation error
+  description?: string | null
 
   @Column({ type: 'date', nullable: true })
-  @IsNotEmpty()
-  @IsDateString()
-  due_date: Date
+  @IsOptional() // Make the property optional
+  @IsDateString() // Add a custom message for validation error
+  due_date?: Date | null
 
-  @Column({ type: 'varchar', length: 15, nullable: false })
-  @IsNotEmpty()
-  @IsString()
-  priority: string
+  @Column({ type: 'varchar', length: 15, nullable: true })
+  @IsOptional() // Make the property optional
+  @IsString() // Add a custom message for validation error
+  priority?: string | null
 
   @ManyToOne(() => TaskList)
   @JoinColumn({ name: 'list_id' })

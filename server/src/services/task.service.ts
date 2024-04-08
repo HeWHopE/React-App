@@ -37,7 +37,6 @@ export class TaskService {
       throw new Error('Failed to fetch task from the database')
     }
   }
-
   async createTask(
     createTaskDto: CreateTaskDto,
     listId: number,
@@ -56,9 +55,9 @@ export class TaskService {
         'INSERT INTO tasks (name, description, due_date, priority, list_id, list_name, board_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
         [
           name,
-          description,
-          due_date,
-          priority,
+          description || null, // Use null if description is undefined
+          due_date || null, // Use null if due_date is undefined
+          priority || null, // Use null if priority is undefined
           listId,
           list_name,
           listQueryResult[0].boardId,
@@ -68,7 +67,7 @@ export class TaskService {
       try {
         const activityLog = new ActivityLog()
         activityLog.action_type = 'create'
-        activityLog.action_description = `You added ${newTask.name} to the ${newTask.list_name}`
+        activityLog.action_description = `You added ${newTask.name} to the '${newTask.list_name}'`
         activityLog.timestamp = new Date()
         activityLog.task_id = newTask.id
         activityLog.board_id = listQueryResult[0].boardId

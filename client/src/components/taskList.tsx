@@ -43,22 +43,23 @@ const TaskList: React.FC<TaskListProps> = ({ listId }) => {
   const handleUpdate = (task: ITask) => {
     updateTask({ taskId: Number(task.id), listId, task })
   }
-
   return (
-    <div>
+    <ol className="">
       {taskIsLoading && <div>Loading tasks...</div>}
       {taskError && <div>Error fetching tasks</div>}
       {tasks &&
         tasks.map((task: ITask) => (
-          <TaskItem
-            remove={handleRemove}
-            update={handleUpdate}
-            move={handleMoveTask}
-            key={task.id}
-            task={task}
-          />
+          <li key={task.id} className="flex justify-center h-10 my-1">
+            <TaskItem
+              remove={handleRemove}
+              update={handleUpdate}
+              move={handleMoveTask}
+              key={task.id}
+              task={task}
+            />
+          </li>
         ))}
-    </div>
+    </ol>
   )
 }
 

@@ -1,22 +1,15 @@
 import React from 'react'
 
-const myNavbar: React.FC = () => {
+const MyNavbar: React.FC = () => {
   return (
-    <nav className="bg-white border-b-2 border-gray-200">
-      <div className="mx-auto px-4 sm:px-6 lg:px-6 ">
-        <div className="flex items-center justify-between h-8">
-          <div className="flex items-center">
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                MyTaskBoards
-              </div>
-            </div>
-          </div>
-          <div className="ml-10 flex items-baseline space-x-4">123</div>
+    <nav className="bg-white h-12 border-b-2 border-gray-200">
+      <div className="mx-auto px-4 sm:px-2 md:px-2 lg:px-6 ">
+        <div className="flex items-center justify-between h-10">
+          MyTaskBoards
         </div>
       </div>
     </nav>
   )
 }
 
-export default myNavbar
+export default MyNavbar
